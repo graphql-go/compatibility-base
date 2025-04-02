@@ -9,6 +9,7 @@ import (
 
 // Config represents a set of configuration values.
 type Config struct {
+	// IsDebug represents whether or not the configuration is in debug mode.
 	IsDebug bool
 
 	// GraphqlGoImplementation represents the graphql-go implementation.
