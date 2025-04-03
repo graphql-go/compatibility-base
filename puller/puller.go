@@ -25,10 +25,10 @@ func New() *Puller {
 // PullParams represents the parameters of the pull method.
 type PullParams struct {
 	// Specification is the code repository of the graphql specification.
-	Specification types.Repository
+	Specification *types.Repository
 
 	// Implementation is the code repository of the graphql implementation.
-	Implementation types.Repository
+	Implementation *types.Repository
 }
 
 // PullResult represents the result of the pull method.
@@ -37,9 +37,14 @@ type PullResult struct {
 
 // Pull pulls a set of code repositories and returns the result.
 func (p *Puller) Pull(params *PullParams) (*PullResult, error) {
-	repos := []types.Repository{
-		params.Specification,
-		params.Implementation,
+	repos := []*types.Repository{}
+
+	if params.Specification != nil {
+		repos = append(repos, params.Specification)
+	}
+
+	if params.Implementation != nil {
+		repos = append(repos, params.Implementation)
 	}
 
 	if _, err := os.Stat(reposDirName); err != nil {
