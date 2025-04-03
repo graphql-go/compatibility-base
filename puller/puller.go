@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/graphql-go/compatibility-base/types"
 	"github.com/go-git/go-git/v5"
+	"github.com/graphql-go/compatibility-base/types"
 )
 
 // reposDirName is the code repository root directory name.
@@ -15,6 +15,11 @@ const reposDirName = "repos"
 
 // Puller represents the puller component.
 type Puller struct {
+}
+
+// New returns a pointer to a Puller struct.
+func New() *Puller {
+	return &Puller{}
 }
 
 // PullParams represents the parameters of the pull method.
