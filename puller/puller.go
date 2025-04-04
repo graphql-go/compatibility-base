@@ -31,21 +31,28 @@ type PullParams struct {
 	Implementation *types.Repository
 }
 
+// Repositories returns the parameters as a repositories slice.
+func (p *PullParams) Repositories() []*types.Repository {
+	repos := []*types.Repository{}
+
+	if p.Specification != nil {
+		repos = append(repos, p.Specification)
+	}
+
+	if p.Implementation != nil {
+		repos = append(repos, p.Implementation)
+	}
+
+	return repos
+}
+
 // PullResult represents the result of the pull method.
 type PullResult struct {
 }
 
 // Pull pulls a set of code repositories and returns the result.
 func (p *Puller) Pull(params *PullParams) (*PullResult, error) {
-	repos := []*types.Repository{}
-
-	if params.Specification != nil {
-		repos = append(repos, params.Specification)
-	}
-
-	if params.Implementation != nil {
-		repos = append(repos, params.Implementation)
-	}
+	repos := params.Repositories()
 
 	if _, err := os.Stat(reposDirName); err != nil {
 		if os.IsNotExist(err) {
