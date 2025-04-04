@@ -34,7 +34,7 @@ func TestPullerPull(t *testing.T) {
 		t.Fatalf("expected: nil, got: %v", err)
 	}
 
-	if result != nil {
+	if result == nil {
 		t.Fatalf("expected: %+v, got: nil", expected)
 	}
 }
