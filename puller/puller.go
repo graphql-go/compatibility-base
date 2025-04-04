@@ -54,14 +54,8 @@ type PullResult struct {
 func (p *Puller) Pull(params *PullParams) (*PullResult, error) {
 	repos := params.Repositories()
 
-	if _, err := os.Stat(reposDirName); err != nil {
-		if os.IsNotExist(err) {
-			if err := os.Mkdir(reposDirName, os.ModePerm); err != nil {
-				return nil, fmt.Errorf("failed to create a directory: %w", err)
-			}
-		} else {
-			return nil, fmt.Errorf("failed to check if directory exist: %w", err)
-		}
+	if err := p.createReposDir(); err != nil {
+		return nil, err
 	}
 
 	for _, r := range repos {
@@ -86,4 +80,19 @@ func (p *Puller) Pull(params *PullParams) (*PullResult, error) {
 	}
 
 	return &PullResult{}, nil
+}
+
+// createReposDir creates the `repos` directory and returns whether it succeeded or not.
+func (p *Puller) createReposDir() error {
+	if _, err := os.Stat(reposDirName); err != nil {
+		if os.IsNotExist(err) {
+			if err := os.Mkdir(reposDirName, os.ModePerm); err != nil {
+				return fmt.Errorf("failed to create a directory: %w", err)
+			}
+		} else {
+			return fmt.Errorf("failed to check if directory exist: %w", err)
+		}
+	}
+
+	return nil
 }
