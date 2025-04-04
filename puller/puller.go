@@ -85,10 +85,8 @@ func (p *Puller) gitCloneRepos(repos []*types.Repository) error {
 	for _, r := range repos {
 		name := filepath.Join(reposDirName, r.Name)
 
-		if _, err := os.Stat(name); os.IsNotExist(err) {
-			if err := os.Mkdir(name, os.ModePerm); err != nil {
-				return fmt.Errorf("failed to create a directory: %w", err)
-			}
+		if err := p.createRepoDir(r.Name); err != nil {
+			return err
 		}
 
 		if _, err := git.PlainClone(name, false, &git.CloneOptions{
@@ -100,6 +98,17 @@ func (p *Puller) gitCloneRepos(repos []*types.Repository) error {
 			}
 
 			return fmt.Errorf("failed to clone a git repository: %w", err)
+		}
+	}
+
+	return nil
+}
+
+// createRepoDir creates the `repo` directory and returns whether it succeeded or not.
+func (p *Puller) createRepoDir(name string) error {
+	if _, err := os.Stat(name); os.IsNotExist(err) {
+		if err := os.Mkdir(name, os.ModePerm); err != nil {
+			return fmt.Errorf("failed to create a directory: %w", err)
 		}
 	}
 
