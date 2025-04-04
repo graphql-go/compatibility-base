@@ -58,25 +58,8 @@ func (p *Puller) Pull(params *PullParams) (*PullResult, error) {
 		return nil, err
 	}
 
-	for _, r := range repos {
-		name := filepath.Join(reposDirName, r.Name)
-
-		if _, err := os.Stat(name); os.IsNotExist(err) {
-			if err := os.Mkdir(name, os.ModePerm); err != nil {
-				return nil, fmt.Errorf("failed to create a directory: %w", err)
-			}
-		}
-
-		if _, err := git.PlainClone(name, false, &git.CloneOptions{
-			URL:      r.URL,
-			Progress: os.Stdout,
-		}); err != nil {
-			if strings.Contains(err.Error(), "repository already exists") {
-				return nil, nil
-			}
-
-			return nil, fmt.Errorf("failed to clone a git repository: %w", err)
-		}
+	if err := p.gitCloneRepos(repos); err != nil {
+		return nil, err
 	}
 
 	return &PullResult{}, nil
@@ -91,6 +74,32 @@ func (p *Puller) createReposDir() error {
 			}
 		} else {
 			return fmt.Errorf("failed to check if directory exist: %w", err)
+		}
+	}
+
+	return nil
+}
+
+// gitCloneRepos clones the given repositories and returns whether or not it succeeded.
+func (p *Puller) gitCloneRepos(repos []*types.Repository) error {
+	for _, r := range repos {
+		name := filepath.Join(reposDirName, r.Name)
+
+		if _, err := os.Stat(name); os.IsNotExist(err) {
+			if err := os.Mkdir(name, os.ModePerm); err != nil {
+				return fmt.Errorf("failed to create a directory: %w", err)
+			}
+		}
+
+		if _, err := git.PlainClone(name, false, &git.CloneOptions{
+			URL:      r.URL,
+			Progress: os.Stdout,
+		}); err != nil {
+			if strings.Contains(err.Error(), "repository already exists") {
+				return nil
+			}
+
+			return fmt.Errorf("failed to clone a git repository: %w", err)
 		}
 	}
 

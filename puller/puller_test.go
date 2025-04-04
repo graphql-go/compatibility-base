@@ -1,7 +1,6 @@
 package puller
 
 import (
-	"log"
 	"testing"
 
 	"github.com/graphql-go/compatibility-base/types"
