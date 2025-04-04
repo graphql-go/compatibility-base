@@ -31,8 +31,8 @@ type PullParams struct {
 	Implementation *types.Repository
 }
 
-// Repositories returns the parameters as a repositories slice.
-func (p *PullParams) Repositories() []*types.Repository {
+// repositories returns the parameters as a repositories slice.
+func (p *PullParams) repositories() []*types.Repository {
 	repos := []*types.Repository{}
 
 	if p.Specification != nil {
@@ -52,7 +52,7 @@ type PullResult struct {
 
 // Pull pulls a set of code repositories and returns the result.
 func (p *Puller) Pull(params *PullParams) (*PullResult, error) {
-	repos := params.Repositories()
+	repos := params.repositories()
 
 	if err := p.createReposDir(); err != nil {
 		return nil, err
