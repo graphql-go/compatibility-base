@@ -94,17 +94,22 @@ func (b BubbleTea) View() string {
 
 // RunResult represents the result of the run method.
 type RunResult struct {
+	// Choice is the option chosen.
 	Choice string
 }
 
 // Params represents the parameters struct for the new method.
 type Params struct {
+	// Choices is the slice of options available.
 	Choices []string
-	UI      UIParams
+
+	// UI is the user interface parameters.
+	UI UIParams
 }
 
 // UIParams represents the UI parameters for the new method parameters.
 type UIParams struct {
+	// Header is the UI header text.
 	Header string
 }
 
