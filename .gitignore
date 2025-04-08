@@ -1,2 +1,4 @@
 *.swp
 puller/repos
+coverage.html
+coverage.out
