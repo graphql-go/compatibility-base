@@ -124,7 +124,7 @@ func (b BubbleTea) Run() (*RunResult, error) {
 
 	m, err := teaProgram.Run()
 	if err != nil {
-		return nil, fmt.Errorf("failde to run: %w", err)
+		return nil, fmt.Errorf("failed to run: %w", err)
 	}
 
 	result := &RunResult{}
