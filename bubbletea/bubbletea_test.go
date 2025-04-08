@@ -44,6 +44,7 @@ func TestBubbleTeaUpdate(t *testing.T) {
 	}
 }
 
+// assertFunc asserts the given two functions.
 func assertFunc(t *testing.T, expected any, actual any) {
 	expectedFunc := runtime.FuncForPC(reflect.ValueOf(expected).Pointer()).Name()
 	actualFunc := runtime.FuncForPC(reflect.ValueOf(actual).Pointer()).Name()
