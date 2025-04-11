@@ -5,6 +5,6 @@ type IntrospectionSchema struct {
 	QueryType        IntrospectionObjectType  `json:"queryType"`
 	MutationType     IntrospectionObjectType  `json:"mutationType"`
 	SubscriptionType IntrospectionObjectType  `json:"subscriptionType"`
-	Types            IntrospectionType        `json:"types"`
+	Types            []IntrospectionType      `json:"types"`
 	Directives       []IntrospectionDirective `json:"directives"`
 }
