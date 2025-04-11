@@ -25,13 +25,12 @@ func New(p *NewParams) *CLI {
 
 // RunResult is the result of executing the run method.
 type RunResult struct {
+	// Choice is the option chosen after running the CLI application.
 	Choice string
 }
 
 // RunParams are the parameters of the run method.
 type RunParams struct {
-	Choices []string
-	Header  string
 }
 
 // Run runs the CLI application and returns the result.
