@@ -11,6 +11,7 @@ type CLI struct {
 	bubbletea *bubbletea.BubbleTea
 }
 
+// NewParams represents the parameters for the new method.
 type NewParams struct {
 	Bubbletea *bubbletea.BubbleTea
 }
