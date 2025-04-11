@@ -3,11 +3,16 @@ package cmd
 import (
 	"fmt"
 
-	"graphql-go/compatibility-base/bubbletea"
+	"github.com/graphql-go/compatibility-base/bubbletea"
 )
 
 // CLI represents the command line interface component.
 type CLI struct {
+}
+
+// New returns a pointer to the `CLI` struct.
+func New() *CLI {
+	return &CLI{}
 }
 
 // RunResult is the result of executing the run method.
