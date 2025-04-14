@@ -18,34 +18,50 @@ func TestBubbleTeaInit(t *testing.T) {
 }
 
 func TestBubbleTeaUpdate(t *testing.T) {
-	b := BubbleTea{}
-
 	tests := []struct {
-		subTestName   string
-		updateParams  tea.Msg
-		expectedModel tea.Model
-		expectedCmd   tea.Cmd
+		subTestName      string
+		initialBubbletea tea.Model
+		updateParams     tea.Msg
+		expectedModel    tea.Model
+		expectedCmd      tea.Cmd
 	}{
 		{
-			subTestName:   "Handles invalid tea key message",
-			updateParams:  nil,
-			expectedModel: b,
-			expectedCmd:   (tea.Cmd)(nil),
+			subTestName:      "Handles invalid tea key message",
+			initialBubbletea: BubbleTea{},
+			updateParams:     nil,
+			expectedModel:    BubbleTea{},
+			expectedCmd:      (tea.Cmd)(nil),
 		},
 		{
-			subTestName: "Handles ctrl+c tea key message",
+			subTestName:      "Handles ctrl+c tea key message",
+			initialBubbletea: BubbleTea{},
 			updateParams: tea.KeyMsg{
-				Type:  tea.KeyCtrlC,
-				Runes: []rune{'q'},
+				Type: tea.KeyCtrlC,
 			},
-			expectedModel: b,
+			expectedModel: BubbleTea{},
 			expectedCmd:   tea.Quit,
+		},
+		{
+			subTestName: "Handles enter tea key message",
+			initialBubbletea: BubbleTea{
+				cursor:  0,
+				choices: []string{"test-choice-0"},
+			},
+			updateParams: tea.KeyMsg{
+				Type: tea.KeyEnter,
+			},
+			expectedModel: BubbleTea{
+				cursor:  0,
+				choices: []string{"test-choice-0"},
+				choice:  "test-choice-0",
+			},
+			expectedCmd: tea.Quit,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.subTestName, func(t *testing.T) {
-			model, cmd := b.Update(tt.updateParams)
+			model, cmd := tt.initialBubbletea.Update(tt.updateParams)
 
 			assert.Equal(t, tt.expectedModel, model)
 			assertFunc(t, tt.expectedCmd, cmd)
