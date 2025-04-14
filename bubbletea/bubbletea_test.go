@@ -32,6 +32,15 @@ func TestBubbleTeaUpdate(t *testing.T) {
 			expectedModel: b,
 			expectedCmd:   (tea.Cmd)(nil),
 		},
+		{
+			subTestName: "Handles ctrl+c tea key message",
+			updateParams: tea.KeyMsg{
+				Type:  tea.KeyCtrlC,
+				Runes: []rune{'q'},
+			},
+			expectedModel: b,
+			expectedCmd:   tea.Quit,
+		},
 	}
 
 	for _, tt := range tests {
