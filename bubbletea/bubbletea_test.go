@@ -57,6 +57,38 @@ func TestBubbleTeaUpdate(t *testing.T) {
 			},
 			expectedCmd: tea.Quit,
 		},
+		{
+			subTestName: "Handles down tea key message",
+			initialBubbletea: BubbleTea{
+				cursor:  0,
+				choices: []string{"test-choice-0", "test-choice-1"},
+			},
+			updateParams: tea.KeyMsg{
+				Type:  tea.KeyRunes,
+				Runes: []rune("j"),
+			},
+			expectedModel: BubbleTea{
+				cursor:  1,
+				choices: []string{"test-choice-0", "test-choice-1"},
+			},
+			expectedCmd: nil,
+		},
+		{
+			subTestName: "Handles up tea key message",
+			initialBubbletea: BubbleTea{
+				cursor:  1,
+				choices: []string{"test-choice-0"},
+			},
+			updateParams: tea.KeyMsg{
+				Type:  tea.KeyRunes,
+				Runes: []rune("k"),
+			},
+			expectedModel: BubbleTea{
+				cursor:  0,
+				choices: []string{"test-choice-0"},
+			},
+			expectedCmd: nil,
+		},
 	}
 
 	for _, tt := range tests {
