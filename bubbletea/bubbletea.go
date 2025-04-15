@@ -103,6 +103,9 @@ type Params struct {
 	// Choices is the slice of options available.
 	Choices []string
 
+	// Cursor is the reference of the current CLI choice.
+	Cursor int
+
 	// UI is the user interface parameters.
 	UI UIParams
 }
@@ -117,6 +120,7 @@ type UIParams struct {
 func New(p *Params) *BubbleTea {
 	return &BubbleTea{
 		choices: p.Choices,
+		cursor:  p.Cursor,
 		ui: UI{
 			header: p.UI.Header,
 		},
