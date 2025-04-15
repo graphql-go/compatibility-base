@@ -27,6 +27,21 @@ func TestBubbleTeaView(t *testing.T) {
 (press q to quit)
 `,
 		},
+		{
+			subTestName: "Handles success view result with multiple choices",
+			initialBubbletea: New(&Params{
+				Choices: []string{"test-choice-0", "test-choice-1"},
+				UI: UIParams{
+					Header: "test-header: \n",
+				},
+			}),
+			expectedView: `test-header: 
+(•) test-choice-0
+( ) test-choice-1
+
+(press q to quit)
+`,
+		},
 	}
 
 	for _, tt := range tests {
