@@ -5,6 +5,8 @@ import (
 
 	"github.com/graphql-go/compatibility-base/bubbletea"
 	"github.com/graphql-go/compatibility-base/cmd"
+	"github.com/graphql-go/compatibility-base/config"
+	"github.com/graphql-go/compatibility-base/implementation"
 )
 
 func main() {
@@ -12,8 +14,18 @@ func main() {
 		log.Fatal(err)
 	}
 
+	cfg := config.New()
+	header := cfg.GraphqlJSImplementation.Repo.String(implementation.RefImplementationPrefix)
+
 	params := cmd.NewParams{
-		Bubbletea: bubbletea.New(&bubbletea.Params{}),
+		Bubbletea: bubbletea.New(&bubbletea.Params{
+			Model: bubbletea.NewChoicesModel(&bubbletea.ChoicesModelParams{
+				Choices: cfg.AvailableImplementations,
+				UI: bubbletea.ChoicesModelUIParams{
+					Header: header,
+				},
+			}),
+		}),
 	}
 	cli := cmd.New(&params)
 
