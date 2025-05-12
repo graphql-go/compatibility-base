@@ -20,6 +20,9 @@ type BubbleTea struct {
 
 	// ui is the UI of the CLI.
 	ui UI
+
+	// table is the bubbletea table model.
+	table table.Model
 }
 
 // UI represents the UI struct for the `BubbleTea` component.
