@@ -9,37 +9,86 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-type BubbleTeaModel struct {
+// BubbleTea represents the CLI component that wraps the `bubbletea` library.
+type BubbleTea struct {
+	// baseStyle is the base styling of the BubbleTea component.
+	baseStyle lipgloss.Style
+
+	// currentModel is the current model of the BubbleTea component.
 	currentModel tea.Model
-	baseStyle    lipgloss.Style
 }
 
-func (b BubbleTeaModel) Init() tea.Cmd {
+// Init is the `BubbleTea` method required for implementing the `Model` interface.
+func (b BubbleTea) Init() tea.Cmd {
 	return nil
 }
 
-func (b BubbleTeaModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	return nil, nil
+// Update is the `BubbleTea` method required for implementing the `Model` interface.
+func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	keyMsg, ok := msg.(tea.KeyMsg)
+	if !ok {
+		return b, nil
+	}
+
+	switch keyMsg.String() {
+	case "ctrl+c", "q", "esc":
+		return b, tea.Quit
+	}
+
+	return b, nil
 }
 
-func (b BubbleTeaModel) View() string {
+// View is the `BubbleTea` method required for implementing the `Model` interface.
+func (b BubbleTea) View() string {
 	return b.baseStyle.Render(b.currentModel.View()) + "\n"
 }
 
-func NewBubbleTeaModel() *BubbleTeaModel {
+// Run runs the `BubbleTea` component and returns its result.
+func (b BubbleTea) Run() (*RunResult, error) {
+	teaProgram := tea.NewProgram(b)
+
+	_, err := teaProgram.Run()
+	if err != nil {
+		return nil, fmt.Errorf("failed to run: %w", err)
+	}
+
+	result := &RunResult{}
+
+	// if m, ok := m.(BubbleTea); ok && m.choice != "" {
+	// 	result.Choice = m.choice
+	// }
+
+	return result, nil
+}
+
+// RunResult represents the result of the run method.
+type RunResult struct {
+	// Choice is the option chosen.
+	Choice string
+}
+
+// Params represents the parameters for the `NewBubbleTea` function.
+type Params struct {
+	// Model is the model parameter of the BubbleTea component.
+	Model tea.Model
+}
+
+// NewBubbleTea returns a new BubbleTea struct instance.
+func New(p *Params) *BubbleTea {
 	var baseStyle = lipgloss.NewStyle().
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(lipgloss.Color("240"))
 
-	b := &BubbleTeaModel{}
+	b := &BubbleTea{}
 
 	b.baseStyle = baseStyle
+	b.currentModel = p.Model
 
 	return b
 }
 
-// BubbleTea represents the CLI component that wraps the `bubbletea` library.
-type BubbleTea struct {
+// ChoicesModel represents the CLI component that wraps the `bubbletea` library.
+type ChoicesModel struct {
 	// cursor is the reference of the current CLI choice.
 	cursor int
 
@@ -50,26 +99,26 @@ type BubbleTea struct {
 	choices []string
 
 	// ui is the UI of the CLI.
-	ui UI
+	ui ChoicesModelUI
 
 	// table is the bubbletea table model.
 	// TODO(@chris-ramon): Make it available through multiple model support.
 	table table.Model
 }
 
-// UI represents the UI struct for the `BubbleTea` component.
-type UI struct {
+// ChoicesModelUI represents the UI struct for the `ChoicesModel` component.
+type ChoicesModelUI struct {
 	// header is the UI header text.
 	header string
 }
 
 // Init is the `BubbleTea` method required for implementing the `Model` interface.
-func (b BubbleTea) Init() tea.Cmd {
+func (b ChoicesModel) Init() tea.Cmd {
 	return nil
 }
 
 // Update is the `BubbleTea` method required for implementing the `Model` interface.
-func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:golint,ireturn
+func (b ChoicesModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:golint,ireturn
 	keyMsg, ok := msg.(tea.KeyMsg)
 	if !ok {
 		return b, nil
@@ -103,7 +152,7 @@ func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:golint,ir
 }
 
 // View is the `BubbleTea` method required for implementing the `Model` interface.
-func (b BubbleTea) View() string {
+func (b ChoicesModel) View() string {
 	s := strings.Builder{}
 	s.WriteString(b.ui.header)
 	s.WriteString("")
@@ -127,14 +176,8 @@ func (b BubbleTea) View() string {
 	return s.String()
 }
 
-// RunResult represents the result of the run method.
-type RunResult struct {
-	// Choice is the option chosen.
-	Choice string
-}
-
-// Params represents the parameters struct for the new method.
-type Params struct {
+// ChoicesModelParams represents the parameters struct for the `NewChoicesModel` function.
+type ChoicesModelParams struct {
 	// Choices is the slice of options available.
 	Choices []string
 
@@ -142,40 +185,22 @@ type Params struct {
 	Cursor int
 
 	// UI is the user interface parameters.
-	UI UIParams
+	UI ChoicesModelUIParams
 }
 
-// UIParams represents the UI parameters for the new method parameters.
-type UIParams struct {
+// ChoicesModelUIParams represents the UI parameters for the `NewChoicesModel` function parameters.
+type ChoicesModelUIParams struct {
 	// Header is the UI header text.
 	Header string
 }
 
-// New returns a pointer for the `BubbleTea` component.
-func New(p *Params) *BubbleTea {
-	return &BubbleTea{
+// NewChoicesModel returns a pointer for the `ChoicesModel`.
+func NewChoicesModel(p *ChoicesModelParams) *ChoicesModel {
+	return &ChoicesModel{
 		choices: p.Choices,
 		cursor:  p.Cursor,
-		ui: UI{
+		ui: ChoicesModelUI{
 			header: p.UI.Header,
 		},
 	}
-}
-
-// Run runs the `BubbleTea` component and returns its result.
-func (b BubbleTea) Run() (*RunResult, error) {
-	teaProgram := tea.NewProgram(b)
-
-	m, err := teaProgram.Run()
-	if err != nil {
-		return nil, fmt.Errorf("failed to run: %w", err)
-	}
-
-	result := &RunResult{}
-
-	if m, ok := m.(BubbleTea); ok && m.choice != "" {
-		result.Choice = m.choice
-	}
-
-	return result, nil
 }
