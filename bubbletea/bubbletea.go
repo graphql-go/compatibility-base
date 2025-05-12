@@ -6,7 +6,37 @@ import (
 
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
+
+type BubbleTeaModel struct {
+	currentModel tea.Model
+	baseStyle    lipgloss.Style
+}
+
+func (b BubbleTeaModel) Init() tea.Cmd {
+	return nil
+}
+
+func (b BubbleTeaModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	return nil, nil
+}
+
+func (b BubbleTeaModel) View() string {
+	return b.baseStyle.Render(b.currentModel.View()) + "\n"
+}
+
+func NewBubbleTeaModel() *BubbleTeaModel {
+	var baseStyle = lipgloss.NewStyle().
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(lipgloss.Color("240"))
+
+	b := &BubbleTeaModel{}
+
+	b.baseStyle = baseStyle
+
+	return b
+}
 
 // BubbleTea represents the CLI component that wraps the `bubbletea` library.
 type BubbleTea struct {
