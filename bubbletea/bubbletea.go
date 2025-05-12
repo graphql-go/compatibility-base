@@ -9,13 +9,19 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+// Model represents the component that wraps the `bubbletea` Model interface.
+type Model interface {
+	tea.Model
+	Run(modelResult any) (any, error)
+}
+
 // BubbleTea represents the CLI component that wraps the `bubbletea` library.
 type BubbleTea struct {
 	// baseStyle is the base styling of the BubbleTea component.
 	baseStyle lipgloss.Style
 
 	// currentModel is the current model of the BubbleTea component.
-	currentModel tea.Model
+	currentModel Model
 }
 
 // Init is the `BubbleTea` method required for implementing the `Model` interface.
@@ -44,33 +50,21 @@ func (b BubbleTea) View() string {
 }
 
 // Run runs the `BubbleTea` component and returns its result.
-func (b BubbleTea) Run() (*RunResult, error) {
+func (b BubbleTea) Run() (any, error) {
 	teaProgram := tea.NewProgram(b)
 
-	_, err := teaProgram.Run()
+	m, err := teaProgram.Run()
 	if err != nil {
 		return nil, fmt.Errorf("failed to run: %w", err)
 	}
 
-	result := &RunResult{}
-
-	// if m, ok := m.(BubbleTea); ok && m.choice != "" {
-	// 	result.Choice = m.choice
-	// }
-
-	return result, nil
-}
-
-// RunResult represents the result of the run method.
-type RunResult struct {
-	// Choice is the option chosen.
-	Choice string
+	return b.currentModel.Run(m)
 }
 
 // Params represents the parameters for the `NewBubbleTea` function.
 type Params struct {
 	// Model is the model parameter of the BubbleTea component.
-	Model tea.Model
+	Model Model
 }
 
 // NewBubbleTea returns a new BubbleTea struct instance.
@@ -174,6 +168,23 @@ func (b ChoicesModel) View() string {
 	s.WriteString(endingMessage)
 
 	return s.String()
+}
+
+// ChoicesModelResult represents the result of the run method.
+type ChoicesModelResult struct {
+	// Choice is the option chosen.
+	Choice string
+}
+
+// Run runs the `ChoicesModel` component and returns its result.
+func (b ChoicesModel) Run(model any) (any, error) {
+	result := &ChoicesModelResult{}
+
+	if model, ok := model.(ChoicesModel); ok && model.choice != "" {
+		result.Choice = model.choice
+	}
+
+	return result, nil
 }
 
 // ChoicesModelParams represents the parameters struct for the `NewChoicesModel` function.
