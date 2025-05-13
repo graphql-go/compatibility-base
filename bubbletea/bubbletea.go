@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -20,6 +21,10 @@ type BubbleTea struct {
 
 	// ui is the UI of the CLI.
 	ui UI
+
+	// table is the bubbletea table model.
+	// TODO(@chris-ramon): Make it available through multiple model support.
+	table table.Model
 }
 
 // UI represents the UI struct for the `BubbleTea` component.
