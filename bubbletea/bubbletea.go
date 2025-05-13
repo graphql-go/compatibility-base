@@ -23,6 +23,7 @@ type BubbleTea struct {
 	ui UI
 
 	// table is the bubbletea table model.
+	// TODO(@chris-ramon): Make it available through multiple model support.
 	table table.Model
 }
 
