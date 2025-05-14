@@ -16,31 +16,26 @@ func TestBubbleTeaView(t *testing.T) {
 		{
 			subTestName: "Handles success view result",
 			initialBubbletea: New(&Params{
-				Choices: []string{"test-choice-0"},
-				UI: UIParams{
-					Header: "test-header: \n",
-				},
+				Model: NewChoicesModel(&ChoicesModelParams{
+					Choices: []string{"test-choice-0"},
+					UI: ChoicesModelUIParams{
+						Header: "test-header: \n",
+					},
+				}),
 			}),
-			expectedView: `test-header: 
-(•) test-choice-0
-
-(press q to quit)
-`,
+			expectedView: "┌─────────────────┐\n│test-header:     │\n│(•) test-choice-0│\n│                 │\n│(press q to quit)│\n│                 │\n└─────────────────┘\n",
 		},
 		{
 			subTestName: "Handles success view result with multiple choices",
 			initialBubbletea: New(&Params{
-				Choices: []string{"test-choice-0", "test-choice-1"},
-				UI: UIParams{
-					Header: "test-header: \n",
-				},
+				Model: NewChoicesModel(&ChoicesModelParams{
+					Choices: []string{"test-choice-0", "test-choice-1"},
+					UI: ChoicesModelUIParams{
+						Header: "test-header: \n",
+					},
+				}),
 			}),
-			expectedView: `test-header: 
-(•) test-choice-0
-( ) test-choice-1
-
-(press q to quit)
-`,
+			expectedView: "┌─────────────────┐\n│test-header:     │\n│(•) test-choice-0│\n│( ) test-choice-1│\n│                 │\n│(press q to quit)│\n│                 │\n└─────────────────┘\n",
 		},
 	}
 

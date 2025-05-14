@@ -3,12 +3,36 @@ package main
 import (
 	"log"
 
+	"github.com/graphql-go/compatibility-base/bubbletea"
 	"github.com/graphql-go/compatibility-base/cmd"
+	"github.com/graphql-go/compatibility-base/config"
+	"github.com/graphql-go/compatibility-base/implementation"
 )
 
 func main() {
-	params := cmd.NewParams{}
+	handleErr := func(err error) {
+		log.Fatal(err)
+	}
+
+	cfg := config.New()
+	header := cfg.GraphqlJSImplementation.Repo.String(implementation.RefImplementationPrefix)
+
+	params := cmd.NewParams{
+		Bubbletea: bubbletea.New(&bubbletea.Params{
+			Model: bubbletea.NewChoicesModel(&bubbletea.ChoicesModelParams{
+				Choices: cfg.AvailableImplementations,
+				UI: bubbletea.ChoicesModelUIParams{
+					Header: header,
+				},
+			}),
+		}),
+	}
 	cli := cmd.New(&params)
 
-	log.Println(cli)
+	result, err := cli.Run(&cmd.RunParams{})
+	if err != nil {
+		handleErr(err)
+	}
+
+	log.Println(result)
 }
