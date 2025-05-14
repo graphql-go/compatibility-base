@@ -179,6 +179,9 @@ func (b ChoicesModel) Run(model any) (any, error) {
 
 // ChoicesModelParams represents the parameters struct for the `NewChoicesModel` function.
 type ChoicesModelParams struct {
+	// Choice is the current CLI choice.
+	Choice string
+
 	// Choices is the slice of options available.
 	Choices []string
 
@@ -198,6 +201,7 @@ type ChoicesModelUIParams struct {
 // NewChoicesModel returns a pointer for the `ChoicesModel`.
 func NewChoicesModel(p *ChoicesModelParams) *ChoicesModel {
 	return &ChoicesModel{
+		choice:  p.Choice,
 		choices: p.Choices,
 		cursor:  p.Cursor,
 		ui: ChoicesModelUI{
