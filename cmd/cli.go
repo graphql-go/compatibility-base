@@ -9,11 +9,13 @@ import (
 
 // CLI represents the command line interface component.
 type CLI struct {
+	// bubbletea is the component that wraps the bubbletea library.
 	bubbletea *bubbletea.BubbleTea
 }
 
 // NewParams represents the parameters for the new method.
 type NewParams struct {
+	// Bubbletea is the component parameter that wraps the bubbletea library.
 	Bubbletea *bubbletea.BubbleTea
 }
 

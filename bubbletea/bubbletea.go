@@ -11,7 +11,10 @@ import (
 
 // Model represents the component that wraps the `bubbletea` Model interface.
 type Model interface {
+	// tea.Model is the base interface.
 	tea.Model
+
+	// Run runs and returns its result.
 	Run(modelResult any) (any, error)
 }
 
