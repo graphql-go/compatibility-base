@@ -57,7 +57,7 @@ type Params struct {
 	Model Model
 }
 
-// NewBubbleTea returns a new BubbleTea struct instance.
+// New returns a new BubbleTea struct instance.
 func New(p *Params) *BubbleTea {
 	var baseStyle = lipgloss.NewStyle().
 		BorderStyle(lipgloss.NormalBorder()).
