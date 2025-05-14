@@ -26,22 +26,12 @@ type BubbleTea struct {
 
 // Init is the `BubbleTea` method required for implementing the `Model` interface.
 func (b BubbleTea) Init() tea.Cmd {
-	return nil
+	return b.currentModel.Init()
 }
 
 // Update is the `BubbleTea` method required for implementing the `Model` interface.
 func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	keyMsg, ok := msg.(tea.KeyMsg)
-	if !ok {
-		return b, nil
-	}
-
-	switch keyMsg.String() {
-	case "ctrl+c", "q", "esc":
-		return b, tea.Quit
-	}
-
-	return b, nil
+	return b.currentModel.Update(msg)
 }
 
 // View is the `BubbleTea` method required for implementing the `Model` interface.
