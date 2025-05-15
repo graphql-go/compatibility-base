@@ -68,10 +68,10 @@ func New(p *Params) *BubbleTea {
 	var baseStyle = lipgloss.NewStyle().
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(lipgloss.Color("102")).
-		Bold(true).
-		PaddingTop(2).
-		PaddingLeft(4).
-		Width(22)
+		Bold(false).
+		PaddingTop(1).
+		PaddingLeft(1).
+		Width(80)
 
 	b := &BubbleTea{}
 
@@ -173,7 +173,7 @@ func (b ChoicesModel) View() string {
 
 	choicesModelView := s.String()
 
-	return b.baseStyle.Render(choicesModelView)
+	return b.baseStyle.Render(choicesModelView) + "\n"
 }
 
 // ChoicesModelResult represents the result of the run method.
