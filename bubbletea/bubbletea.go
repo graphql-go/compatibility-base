@@ -61,23 +61,29 @@ func (b BubbleTea) Run() (any, error) {
 type Params struct {
 	// Model is the model parameter of the BubbleTea component.
 	Model Model
+
+	// BaseStyle is the base styling parameter of the BubbleTea component.
+	BaseStyle lipgloss.Style
 }
 
-// New returns a new BubbleTea struct instance.
-func New(p *Params) *BubbleTea {
-	var baseStyle = lipgloss.NewStyle().
+// NewBaseStyle returns the default lipgloss base style.
+func NewBaseStyle() lipgloss.Style {
+	return lipgloss.NewStyle().
 		BorderStyle(lipgloss.NormalBorder()).
 		BorderForeground(lipgloss.Color("102")).
 		Bold(false).
 		PaddingTop(1).
 		PaddingLeft(1).
 		Width(80)
+}
 
+// New returns a new BubbleTea struct instance.
+func New(p *Params) *BubbleTea {
 	b := &BubbleTea{}
 
-	b.baseStyle = baseStyle
+	b.baseStyle = p.BaseStyle
 	b.currentModel = p.Model
-	b.currentModel.WithBaseStyle(baseStyle)
+	b.currentModel.WithBaseStyle(p.BaseStyle)
 
 	return b
 }
@@ -210,6 +216,9 @@ type ChoicesModelParams struct {
 
 	// UI is the user interface parameters.
 	UI ChoicesModelUIParams
+
+	// BaseStyle is the base styling parameter of the BubbleTea component.
+	BaseStyle lipgloss.Style
 }
 
 // ChoicesModelUIParams represents the UI parameters for the `NewChoicesModel` function parameters.
@@ -227,5 +236,6 @@ func NewChoicesModel(p *ChoicesModelParams) *ChoicesModel {
 		ui: ChoicesModelUI{
 			header: p.UI.Header,
 		},
+		baseStyle: p.BaseStyle,
 	}
 }
