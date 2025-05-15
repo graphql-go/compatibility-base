@@ -25,6 +25,7 @@ func main() {
 					Header: header,
 				},
 			}),
+			BaseStyle: bubbletea.NewBaseStyle(),
 		}),
 	}
 	cli := cmd.New(&params)

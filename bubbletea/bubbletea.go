@@ -16,6 +16,9 @@ type Model interface {
 
 	// Run runs and returns its result.
 	Run(modelResult any) (any, error)
+
+	// WithBaseStyle updates the model to use the given base style.
+	WithBaseStyle(baseStyle lipgloss.Style)
 }
 
 // BubbleTea represents the CLI component that wraps the `bubbletea` library.
@@ -58,18 +61,29 @@ func (b BubbleTea) Run() (any, error) {
 type Params struct {
 	// Model is the model parameter of the BubbleTea component.
 	Model Model
+
+	// BaseStyle is the base styling parameter of the BubbleTea component.
+	BaseStyle lipgloss.Style
+}
+
+// NewBaseStyle returns the default lipgloss base style.
+func NewBaseStyle() lipgloss.Style {
+	return lipgloss.NewStyle().
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(lipgloss.Color("102")).
+		Bold(false).
+		PaddingTop(1).
+		PaddingLeft(1).
+		Width(80)
 }
 
 // New returns a new BubbleTea struct instance.
 func New(p *Params) *BubbleTea {
-	var baseStyle = lipgloss.NewStyle().
-		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(lipgloss.Color("240"))
-
 	b := &BubbleTea{}
 
-	b.baseStyle = baseStyle
+	b.baseStyle = p.BaseStyle
 	b.currentModel = p.Model
+	b.currentModel.WithBaseStyle(p.BaseStyle)
 
 	return b
 }
@@ -91,6 +105,9 @@ type ChoicesModel struct {
 	// table is the bubbletea table model.
 	// TODO(@chris-ramon): Make it available through multiple model support.
 	table table.Model
+
+	// baseStyle is the base styling of the BubbleTea component.
+	baseStyle lipgloss.Style
 }
 
 // ChoicesModelUI represents the UI struct for the `ChoicesModel` component.
@@ -160,7 +177,9 @@ func (b ChoicesModel) View() string {
 	endingMessage := "\n(press q to quit)\n"
 	s.WriteString(endingMessage)
 
-	return s.String()
+	choicesModelView := s.String()
+
+	return b.baseStyle.Render(choicesModelView) + "\n"
 }
 
 // ChoicesModelResult represents the result of the run method.
@@ -180,6 +199,10 @@ func (b ChoicesModel) Run(model any) (any, error) {
 	return result, nil
 }
 
+func (b *ChoicesModel) WithBaseStyle(baseStyle lipgloss.Style) {
+	b.baseStyle = baseStyle
+}
+
 // ChoicesModelParams represents the parameters struct for the `NewChoicesModel` function.
 type ChoicesModelParams struct {
 	// Choice is the current CLI choice.
@@ -193,6 +216,9 @@ type ChoicesModelParams struct {
 
 	// UI is the user interface parameters.
 	UI ChoicesModelUIParams
+
+	// BaseStyle is the base styling parameter of the BubbleTea component.
+	BaseStyle lipgloss.Style
 }
 
 // ChoicesModelUIParams represents the UI parameters for the `NewChoicesModel` function parameters.
@@ -210,5 +236,6 @@ func NewChoicesModel(p *ChoicesModelParams) *ChoicesModel {
 		ui: ChoicesModelUI{
 			header: p.UI.Header,
 		},
+		baseStyle: p.BaseStyle,
 	}
 }
