@@ -53,10 +53,14 @@ func (tm TableModel) View() string {
 	return tm.baseStyle.Render("") + "\n"
 }
 
+// `TableModelResult` represents the `TableModel` run method result.
+type TableModelResult struct {
+}
+
 // `Run` is the `TableModel` method required for implementing the `Model` interface.
 // Runs the `TableModel` component and returns its result.
 func (tm TableModel) Run(model any) (any, error) {
-	result := &ChoicesModelResult{}
+	result := &TableModelResult{}
 
 	if m, ok := model.(TableModel); ok {
 		return m, nil
