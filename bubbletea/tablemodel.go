@@ -17,7 +17,7 @@ type TableModel struct {
 
 // `Init` is the `TableModel` method required for implementing the `Model` interface.
 // Initializes the `TableModel` component and returns a `bubbletea` command.
-func (tb TableModel) Init() tea.Cmd {
+func (tm TableModel) Init() tea.Cmd {
 	return nil
 }
 
