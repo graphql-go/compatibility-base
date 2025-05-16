@@ -24,7 +24,7 @@ type ChoicesModel struct {
 
 	// table is the bubbletea table model.
 	// TODO(@chris-ramon): Make it available through multiple model support.
-	table table.Model
+	table table.Model //nolint:golint,unused
 
 	// baseStyle is the base styling of the BubbleTea component.
 	baseStyle lipgloss.Style
