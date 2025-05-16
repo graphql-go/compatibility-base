@@ -9,6 +9,7 @@ import (
 // `TableModel` represents the component that implements the `Model` interface.
 type TableModel struct {
 	// table is the `bubbletea` table model.
+	// TODO(@chris-ramon): Wire to the `TableModel` component.
 	table table.Model
 
 	// baseStyle is the base styling for the `table` model.
