@@ -8,12 +8,12 @@ import (
 
 // `TableModel` represents the component that implements the `Model` interface.
 type TableModel struct {
+	// baseStyle is the base styling for the `table` model.
+	baseStyle lipgloss.Style
+
 	// table is the `bubbletea` table model.
 	// TODO(@chris-ramon): Wire to the `TableModel` component.
 	table table.Model
-
-	// baseStyle is the base styling for the `table` model.
-	baseStyle lipgloss.Style
 }
 
 // `Init` is the `TableModel` method required for implementing the `Model` interface.
@@ -84,7 +84,18 @@ type TableModelParams struct {
 
 // `NewTableModel` returns a pointer to a `TableModel`.
 func NewTableModel(p *TableModelParams) *TableModel {
+	columns := []table.Column{}
+	rows := []table.Row{}
+
+	t := table.New(
+		table.WithColumns(columns),
+		table.WithRows(rows),
+		table.WithFocused(true),
+		table.WithHeight(7),
+	)
+
 	return &TableModel{
 		baseStyle: p.BaseStyle,
+		table:     t,
 	}
 }
