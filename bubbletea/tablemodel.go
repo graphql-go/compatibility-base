@@ -25,6 +25,7 @@ func (tm TableModel) Init() tea.Cmd {
 // `Update` is the `TableModel` method required for implementing the `Model` interface.
 // Updates the `TableModel` component, handles the given message updating the internal state.
 // Returns the current `TableModel` and the resolved command.
+// TODO(@chris-ramon): Implement the `tea.Msg` handlers.
 func (tm TableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:golint,ireturn
 	keyMsg, ok := msg.(tea.KeyMsg)
 	if !ok {
