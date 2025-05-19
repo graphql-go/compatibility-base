@@ -14,7 +14,7 @@ func TestBubbleTeaUpdate(t *testing.T) {
 		subTestName      string
 		initialBubbletea tea.Model
 		updateParams     tea.Msg
-		expectedModel    *ChoicesModel
+		expectedModel    *BubbleTea
 		expectedCmd      tea.Cmd
 	}{
 		{
@@ -24,7 +24,8 @@ func TestBubbleTeaUpdate(t *testing.T) {
 				BaseStyle: NewBaseStyle(),
 			}),
 			updateParams: nil,
-			expectedModel: NewChoicesModel(&ChoicesModelParams{
+			expectedModel: New(&Params{
+				Model:     NewChoicesModel(&ChoicesModelParams{}),
 				BaseStyle: NewBaseStyle(),
 			}),
 			expectedCmd: (tea.Cmd)(nil),
@@ -38,7 +39,8 @@ func TestBubbleTeaUpdate(t *testing.T) {
 			updateParams: tea.KeyMsg{
 				Type: tea.KeyCtrlC,
 			},
-			expectedModel: NewChoicesModel(&ChoicesModelParams{
+			expectedModel: New(&Params{
+				Model:     NewChoicesModel(&ChoicesModelParams{}),
 				BaseStyle: NewBaseStyle(),
 			}),
 			expectedCmd: tea.Quit,
@@ -54,10 +56,13 @@ func TestBubbleTeaUpdate(t *testing.T) {
 			updateParams: tea.KeyMsg{
 				Type: tea.KeyEnter,
 			},
-			expectedModel: NewChoicesModel(&ChoicesModelParams{
-				Cursor:    0,
-				Choices:   []string{"test-choice-0"},
-				Choice:    "test-choice-0",
+			expectedModel: New(&Params{
+				Model: NewChoicesModel(&ChoicesModelParams{
+					Cursor:    0,
+					Choices:   []string{"test-choice-0"},
+					Choice:    "test-choice-0",
+					BaseStyle: NewBaseStyle(),
+				}),
 				BaseStyle: NewBaseStyle(),
 			}),
 			expectedCmd: tea.Quit,
@@ -74,9 +79,11 @@ func TestBubbleTeaUpdate(t *testing.T) {
 				Type:  tea.KeyRunes,
 				Runes: []rune("j"),
 			},
-			expectedModel: NewChoicesModel(&ChoicesModelParams{
-				Cursor:    1,
-				Choices:   []string{"test-choice-0", "test-choice-1"},
+			expectedModel: New(&Params{
+				Model: NewChoicesModel(&ChoicesModelParams{
+					Cursor:  1,
+					Choices: []string{"test-choice-0", "test-choice-1"},
+				}),
 				BaseStyle: NewBaseStyle(),
 			}),
 			expectedCmd: nil,
@@ -94,9 +101,11 @@ func TestBubbleTeaUpdate(t *testing.T) {
 				Type:  tea.KeyRunes,
 				Runes: []rune("j"),
 			},
-			expectedModel: NewChoicesModel(&ChoicesModelParams{
-				Cursor:    0,
-				Choices:   []string{"test-choice-0", "test-choice-1"},
+			expectedModel: New(&Params{
+				Model: NewChoicesModel(&ChoicesModelParams{
+					Cursor:  0,
+					Choices: []string{"test-choice-0", "test-choice-1"},
+				}),
 				BaseStyle: NewBaseStyle(),
 			}),
 			expectedCmd: nil,
@@ -114,9 +123,11 @@ func TestBubbleTeaUpdate(t *testing.T) {
 				Type:  tea.KeyRunes,
 				Runes: []rune("k"),
 			},
-			expectedModel: NewChoicesModel(&ChoicesModelParams{
-				Cursor:    0,
-				Choices:   []string{"test-choice-0", "test-choice-1"},
+			expectedModel: New(&Params{
+				Model: NewChoicesModel(&ChoicesModelParams{
+					Cursor:  0,
+					Choices: []string{"test-choice-0", "test-choice-1"},
+				}),
 				BaseStyle: NewBaseStyle(),
 			}),
 			expectedCmd: nil,
@@ -134,9 +145,11 @@ func TestBubbleTeaUpdate(t *testing.T) {
 				Type:  tea.KeyRunes,
 				Runes: []rune("k"),
 			},
-			expectedModel: NewChoicesModel(&ChoicesModelParams{
-				Cursor:    0,
-				Choices:   []string{"test-choice-0"},
+			expectedModel: New(&Params{
+				Model: NewChoicesModel(&ChoicesModelParams{
+					Cursor:  0,
+					Choices: []string{"test-choice-0"},
+				}),
 				BaseStyle: NewBaseStyle(),
 			}),
 			expectedCmd: nil,
