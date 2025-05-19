@@ -35,12 +35,13 @@ func (b BubbleTea) Init() tea.Cmd {
 
 // Update is the `BubbleTea` method required for implementing the `Model` interface.
 func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	return b.currentModel.Update(msg)
+	_, cmd := b.currentModel.Update(msg)
+	return b, cmd
 }
 
 // View is the `BubbleTea` method required for implementing the `Model` interface.
 func (b BubbleTea) View() string {
-	return b.baseStyle.Render(b.currentModel.View()) + "\n"
+	return b.currentModel.View()
 }
 
 // Run runs the `BubbleTea` component and returns its result.
