@@ -3,7 +3,6 @@ package bubbletea
 import (
 	"strings"
 
-	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -21,10 +20,6 @@ type ChoicesModel struct {
 
 	// ui is the UI of the CLI.
 	ui ChoicesModelUI
-
-	// table is the bubbletea table model.
-	// TODO(@chris-ramon): Make it available through multiple model support.
-	table table.Model //nolint:golint,unused
 
 	// baseStyle is the base styling of the BubbleTea component.
 	baseStyle lipgloss.Style
