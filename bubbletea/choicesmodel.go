@@ -3,7 +3,6 @@ package bubbletea
 import (
 	"strings"
 
-	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -22,10 +21,6 @@ type ChoicesModel struct {
 	// ui is the UI of the CLI.
 	ui ChoicesModelUI
 
-	// table is the bubbletea table model.
-	// TODO(@chris-ramon): Make it available through multiple model support.
-	table table.Model //nolint:golint,unused
-
 	// baseStyle is the base styling of the BubbleTea component.
 	baseStyle lipgloss.Style
 }
@@ -42,7 +37,7 @@ func (b ChoicesModel) Init() tea.Cmd {
 }
 
 // Update is the `BubbleTea` method required for implementing the `Model` interface.
-func (b ChoicesModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:golint,ireturn
+func (b *ChoicesModel) Update(msg tea.Msg) (Model, tea.Cmd) { //nolint:golint,ireturn
 	keyMsg, ok := msg.(tea.KeyMsg)
 	if !ok {
 		return b, nil

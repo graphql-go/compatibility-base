@@ -9,8 +9,14 @@ import (
 
 // Model represents the component that wraps the `bubbletea` Model interface.
 type Model interface {
-	// tea.Model is the base interface.
-	tea.Model
+	// Init initializes the model and returns the next tea command.
+	Init() tea.Cmd
+
+	// Update updates the model and returns the same model and the next tea command.
+	Update(msg tea.Msg) (Model, tea.Cmd)
+
+	// View returns the model view representation.
+	View() string
 
 	// Run runs and returns its result.
 	Run(modelResult any) (any, error)
@@ -35,12 +41,14 @@ func (b BubbleTea) Init() tea.Cmd {
 
 // Update is the `BubbleTea` method required for implementing the `Model` interface.
 func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	return b.currentModel.Update(msg)
+	model, cmd := b.currentModel.Update(msg)
+	b.currentModel = model
+	return b, cmd
 }
 
 // View is the `BubbleTea` method required for implementing the `Model` interface.
 func (b BubbleTea) View() string {
-	return b.baseStyle.Render(b.currentModel.View()) + "\n"
+	return b.currentModel.View()
 }
 
 // Run runs the `BubbleTea` component and returns its result.
