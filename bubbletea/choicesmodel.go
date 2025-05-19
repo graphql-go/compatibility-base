@@ -37,7 +37,7 @@ func (b ChoicesModel) Init() tea.Cmd {
 }
 
 // Update is the `BubbleTea` method required for implementing the `Model` interface.
-func (b ChoicesModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:golint,ireturn
+func (b *ChoicesModel) Update(msg tea.Msg) (Model, tea.Cmd) { //nolint:golint,ireturn
 	keyMsg, ok := msg.(tea.KeyMsg)
 	if !ok {
 		return b, nil
