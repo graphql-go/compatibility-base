@@ -75,6 +75,7 @@ func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 		b.currentModel = nextModel
+		b.currentModel.WithBaseStyle(b.baseStyle)
 		return b, nil
 	default:
 		b.currentModel = model
@@ -131,7 +132,7 @@ func NewBaseStyle() lipgloss.Style {
 		Bold(false).
 		PaddingTop(1).
 		PaddingLeft(1).
-		Width(80)
+		Width(85)
 }
 
 // New returns a new BubbleTea struct instance.
