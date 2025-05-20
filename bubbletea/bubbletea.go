@@ -23,6 +23,26 @@ type Model interface {
 
 	// WithBaseStyle updates the model to use the given base style.
 	WithBaseStyle(baseStyle lipgloss.Style)
+
+	// Order returns the order of the model.
+	Order() uint
+}
+
+// Models are the slice of Model interfaces.
+type Models []Model
+
+func (m Models) First() Model {
+	if len(m) == 1 {
+		return m[0]
+	}
+
+	for _, model := range m {
+		if model.Order() == 1 {
+			return model
+		}
+	}
+
+	return nil
 }
 
 // BubbleTea represents the CLI component that wraps the `bubbletea` library.
@@ -32,6 +52,9 @@ type BubbleTea struct {
 
 	// currentModel is the current model of the BubbleTea component.
 	currentModel Model
+
+	// models are the models of the `BubbleTea` component.
+	models Models
 }
 
 // Init is the `BubbleTea` method required for implementing the `Model` interface.
@@ -42,7 +65,26 @@ func (b BubbleTea) Init() tea.Cmd {
 // Update is the `BubbleTea` method required for implementing the `Model` interface.
 func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	model, cmd := b.currentModel.Update(msg)
-	b.currentModel = model
+
+	keyMsg, ok := msg.(tea.KeyMsg)
+	if !ok {
+		return b, nil
+	}
+
+	switch keyMsg.String() {
+	case "enter":
+		nextModel := b.NextModel()
+		if nextModel == nil {
+			return b, cmd
+		}
+
+		b.currentModel = nextModel
+		b.currentModel.WithBaseStyle(b.baseStyle)
+		return b, nil
+	default:
+		b.currentModel = model
+	}
+
 	return b, cmd
 }
 
@@ -63,10 +105,24 @@ func (b BubbleTea) Run() (any, error) {
 	return b.currentModel.Run(m)
 }
 
+// NextModel returns the next model, ordered by the order field.
+func (b BubbleTea) NextModel() Model {
+	currentOrder := b.currentModel.Order()
+	nextOrder := currentOrder + 1
+
+	for _, m := range b.models {
+		if m.Order() == nextOrder {
+			return m
+		}
+	}
+
+	return nil
+}
+
 // Params represents the parameters for the `NewBubbleTea` function.
 type Params struct {
-	// Model is the model parameter of the BubbleTea component.
-	Model Model
+	// Models are the models parameters for the `BubbleTea` component.
+	Models Models
 
 	// BaseStyle is the base styling parameter of the BubbleTea component.
 	BaseStyle lipgloss.Style
@@ -80,7 +136,7 @@ func NewBaseStyle() lipgloss.Style {
 		Bold(false).
 		PaddingTop(1).
 		PaddingLeft(1).
-		Width(80)
+		Width(85)
 }
 
 // New returns a new BubbleTea struct instance.
@@ -88,7 +144,8 @@ func New(p *Params) *BubbleTea {
 	b := &BubbleTea{}
 
 	b.baseStyle = p.BaseStyle
-	b.currentModel = p.Model
+	b.models = p.Models
+	b.currentModel = p.Models.First()
 	b.currentModel.WithBaseStyle(p.BaseStyle)
 
 	return b

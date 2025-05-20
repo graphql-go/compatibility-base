@@ -19,12 +19,18 @@ func main() {
 
 	params := cmd.NewParams{
 		Bubbletea: bubbletea.New(&bubbletea.Params{
-			Model: bubbletea.NewChoicesModel(&bubbletea.ChoicesModelParams{
-				Choices: cfg.AvailableImplementations,
-				UI: bubbletea.ChoicesModelUIParams{
-					Header: header,
-				},
-			}),
+			Models: bubbletea.Models{
+				bubbletea.NewChoicesModel(&bubbletea.ChoicesModelParams{
+					Order:   1,
+					Choices: cfg.AvailableImplementations,
+					UI: bubbletea.ChoicesModelUIParams{
+						Header: header,
+					},
+				}),
+				bubbletea.NewTableModel(&bubbletea.TableModelParams{
+					Order: 2,
+				}),
+			},
 			BaseStyle: bubbletea.NewBaseStyle(),
 		}),
 	}

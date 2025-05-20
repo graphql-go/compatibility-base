@@ -8,7 +8,8 @@ import (
 
 func TestBubbleTeaInit(t *testing.T) {
 	b := New(&Params{
-		Model: &ChoicesModel{},
+		Models:    Models{NewChoicesModel(&ChoicesModelParams{})},
+		BaseStyle: NewBaseStyle(),
 	})
 
 	assert.Nil(t, b.Init(), "unexpected non-nil result")

@@ -12,8 +12,10 @@ type TableModel struct {
 	baseStyle lipgloss.Style
 
 	// table is the `bubbletea` table model.
-	// TODO(@chris-ramon): Wire to the `TableModel` component.
 	table table.Model
+
+	// order is the order of the model
+	order uint
 }
 
 // `Init` is the `TableModel` method required for implementing the `Model` interface.
@@ -26,7 +28,7 @@ func (tm TableModel) Init() tea.Cmd {
 // Updates the `TableModel` component, handles the given message updating the internal state.
 // Returns the current `TableModel` and the resolved command.
 // TODO(@chris-ramon): Implement the `tea.Msg` handlers.
-func (tm TableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:golint,ireturn
+func (tm *TableModel) Update(msg tea.Msg) (Model, tea.Cmd) { //nolint:golint,ireturn
 	keyMsg, ok := msg.(tea.KeyMsg)
 	if !ok {
 		return tm, nil
@@ -52,7 +54,7 @@ func (tm TableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:golint,
 // `View` is the `TableModel` method required for implementing the `Model` interface.
 // View renders the `TableModel` using the base style and returns the results.
 func (tm TableModel) View() string {
-	return tm.baseStyle.Render("") + "\n"
+	return tm.baseStyle.Render(tm.table.View()) + "\n"
 }
 
 // `TableModelResult` represents the `TableModel` run method result.
@@ -76,26 +78,55 @@ func (tm *TableModel) WithBaseStyle(baseStyle lipgloss.Style) {
 	tm.baseStyle = baseStyle
 }
 
+func (tm *TableModel) Order() uint {
+	return tm.order
+}
+
 // `TableModelParams` represents the parameters component for the `NewTableModel` function.
 type TableModelParams struct {
 	// BaseStyle is the base styling parameter.
 	BaseStyle lipgloss.Style
+
+	// Order is the order parameter.
+	Order uint
 }
 
 // `NewTableModel` returns a pointer to a `TableModel`.
 func NewTableModel(p *TableModelParams) *TableModel {
-	columns := []table.Column{}
-	rows := []table.Row{}
+	columns := []table.Column{
+		{Title: "GitHub Stars", Width: 80},
+	}
+
+	// TODO(@chris-ramon): Wire external data.
+	rows := []table.Row{
+		{""},
+	}
 
 	t := table.New(
 		table.WithColumns(columns),
 		table.WithRows(rows),
-		table.WithFocused(true),
-		table.WithHeight(7),
+		table.WithFocused(false),
+		table.WithHeight(2),
 	)
+
+	s := table.DefaultStyles()
+
+	s.Header = s.Header.
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(lipgloss.Color("240")).
+		BorderBottom(true).
+		Bold(false)
+
+	s.Selected = s.Selected.
+		Foreground(lipgloss.Color("229")).
+		Background(lipgloss.Color("#a8a7a3")).
+		Bold(false)
+
+	t.SetStyles(s)
 
 	return &TableModel{
 		baseStyle: p.BaseStyle,
 		table:     t,
+		order:     p.Order,
 	}
 }
