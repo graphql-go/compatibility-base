@@ -61,7 +61,25 @@ func (b BubbleTea) Init() tea.Cmd {
 // Update is the `BubbleTea` method required for implementing the `Model` interface.
 func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	model, cmd := b.currentModel.Update(msg)
-	b.currentModel = model
+
+	keyMsg, ok := msg.(tea.KeyMsg)
+	if !ok {
+		return b, nil
+	}
+
+	switch keyMsg.String() {
+	case "enter":
+		nextModel := b.NextModel()
+		if nextModel == nil {
+			return b, cmd
+		}
+
+		b.currentModel = nextModel
+		return b, nil
+	default:
+		b.currentModel = model
+	}
+
 	return b, cmd
 }
 
@@ -80,6 +98,20 @@ func (b BubbleTea) Run() (any, error) {
 	}
 
 	return b.currentModel.Run(m)
+}
+
+// NextModel returns the next model, ordered by the order field.
+func (b BubbleTea) NextModel() Model {
+	currentOrder := b.currentModel.Order()
+	nextOrder := currentOrder + 1
+
+	for _, m := range b.models {
+		if m.Order() == nextOrder {
+			return m
+		}
+	}
+
+	return nil
 }
 
 // Params represents the parameters for the `NewBubbleTea` function.
