@@ -31,6 +31,7 @@ type Model interface {
 // Models are the slice of Model interfaces.
 type Models []Model
 
+// `First` returns the first model of the `Models` slice.
 func (m Models) First() Model {
 	if len(m) == 1 {
 		return m[0]
