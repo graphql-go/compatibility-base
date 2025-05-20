@@ -12,7 +12,6 @@ type TableModel struct {
 	baseStyle lipgloss.Style
 
 	// table is the `bubbletea` table model.
-	// TODO(@chris-ramon): Wire to the `TableModel` component.
 	table table.Model
 
 	// order is the order of the model
@@ -55,7 +54,7 @@ func (tm *TableModel) Update(msg tea.Msg) (Model, tea.Cmd) { //nolint:golint,ire
 // `View` is the `TableModel` method required for implementing the `Model` interface.
 // View renders the `TableModel` using the base style and returns the results.
 func (tm TableModel) View() string {
-	return tm.baseStyle.Render("") + "\n"
+	return tm.baseStyle.Render(tm.table.View()) + "\n"
 }
 
 // `TableModelResult` represents the `TableModel` run method result.
@@ -94,15 +93,34 @@ type TableModelParams struct {
 
 // `NewTableModel` returns a pointer to a `TableModel`.
 func NewTableModel(p *TableModelParams) *TableModel {
-	columns := []table.Column{}
-	rows := []table.Row{}
+	columns := []table.Column{
+		{Title: "GitHub Stars", Width: 80},
+	}
+	rows := []table.Row{
+		{"9"},
+	}
 
 	t := table.New(
 		table.WithColumns(columns),
 		table.WithRows(rows),
-		table.WithFocused(true),
-		table.WithHeight(7),
+		table.WithFocused(false),
+		table.WithHeight(2),
 	)
+
+	s := table.DefaultStyles()
+
+	s.Header = s.Header.
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(lipgloss.Color("240")).
+		BorderBottom(true).
+		Bold(false)
+
+	s.Selected = s.Selected.
+		Foreground(lipgloss.Color("229")).
+		Background(lipgloss.Color("#a8a7a3")).
+		Bold(false)
+
+	t.SetStyles(s)
 
 	return &TableModel{
 		baseStyle: p.BaseStyle,
