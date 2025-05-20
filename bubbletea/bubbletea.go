@@ -25,6 +25,9 @@ type Model interface {
 	WithBaseStyle(baseStyle lipgloss.Style)
 }
 
+// Models are the slice of Model interfaces.
+type Models []Model
+
 // BubbleTea represents the CLI component that wraps the `bubbletea` library.
 type BubbleTea struct {
 	// baseStyle is the base styling of the BubbleTea component.
