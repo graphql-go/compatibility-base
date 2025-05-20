@@ -68,8 +68,8 @@ func (b BubbleTea) Run() (any, error) {
 
 // Params represents the parameters for the `NewBubbleTea` function.
 type Params struct {
-	// Model is the model parameter of the BubbleTea component.
-	Model Model
+	// Models are the models parameters for the `BubbleTea` component.
+	Models Models
 
 	// BaseStyle is the base styling parameter of the BubbleTea component.
 	BaseStyle lipgloss.Style
