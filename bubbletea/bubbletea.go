@@ -63,13 +63,15 @@ func (b BubbleTea) Init() tea.Cmd {
 }
 
 // Update is the `BubbleTea` method required for implementing the `Model` interface.
+// Returns the `BubbleTea` struct and the next tea command(In case of `nil`, it indicates that the bubbletea program
+// continues to work).
 func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	model, cmd := b.currentModel.Update(msg)
-
 	keyMsg, ok := msg.(tea.KeyMsg)
 	if !ok {
 		return b, nil
 	}
+
+	model, cmd := b.currentModel.Update(msg)
 
 	switch keyMsg.String() {
 	case "enter":
