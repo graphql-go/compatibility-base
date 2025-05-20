@@ -27,6 +27,9 @@ func main() {
 						Header: header,
 					},
 				}),
+				bubbletea.NewTableModel(&bubbletea.TableModelParams{
+					Order: 2,
+				}),
 			},
 			BaseStyle: bubbletea.NewBaseStyle(),
 		}),
