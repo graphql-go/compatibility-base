@@ -16,28 +16,28 @@ func TestBubbleTeaView(t *testing.T) {
 		{
 			subTestName: "Handles success view result",
 			initialBubbletea: New(&Params{
-				Model: NewChoicesModel(&ChoicesModelParams{
+				Models: Models{NewChoicesModel(&ChoicesModelParams{
 					Choices: []string{"test-choice-0"},
 					UI: ChoicesModelUIParams{
 						Header: "test-header: \n",
 					},
-				}),
+				})},
 				BaseStyle: NewBaseStyle(),
 			}),
-			expectedView: "┌────────────────────────────────────────────────────────────────────────────────┐\n│                                                                                │\n│ test-header:                                                                   │\n│ (•) test-choice-0                                                              │\n│                                                                                │\n│ (press q to quit)                                                              │\n│                                                                                │\n└────────────────────────────────────────────────────────────────────────────────┘\n",
+			expectedView: "┌─────────────────────────────────────────────────────────────────────────────────────┐\n│                                                                                     │\n│ test-header:                                                                        │\n│ (•) test-choice-0                                                                   │\n│                                                                                     │\n│ (press q to quit)                                                                   │\n│                                                                                     │\n└─────────────────────────────────────────────────────────────────────────────────────┘\n",
 		},
 		{
 			subTestName: "Handles success view result with multiple choices",
 			initialBubbletea: New(&Params{
-				Model: NewChoicesModel(&ChoicesModelParams{
+				Models: Models{NewChoicesModel(&ChoicesModelParams{
 					Choices: []string{"test-choice-0", "test-choice-1"},
 					UI: ChoicesModelUIParams{
 						Header: "test-header: \n",
 					},
-				}),
+				})},
 				BaseStyle: NewBaseStyle(),
 			}),
-			expectedView: "┌────────────────────────────────────────────────────────────────────────────────┐\n│                                                                                │\n│ test-header:                                                                   │\n│ (•) test-choice-0                                                              │\n│ ( ) test-choice-1                                                              │\n│                                                                                │\n│ (press q to quit)                                                              │\n│                                                                                │\n└────────────────────────────────────────────────────────────────────────────────┘\n",
+			expectedView: "┌─────────────────────────────────────────────────────────────────────────────────────┐\n│                                                                                     │\n│ test-header:                                                                        │\n│ (•) test-choice-0                                                                   │\n│ ( ) test-choice-1                                                                   │\n│                                                                                     │\n│ (press q to quit)                                                                   │\n│                                                                                     │\n└─────────────────────────────────────────────────────────────────────────────────────┘\n",
 		},
 	}
 
