@@ -32,6 +32,10 @@ type Model interface {
 type Models []Model
 
 func (m Models) First() Model {
+	if len(m) == 1 {
+		return m[0]
+	}
+
 	for _, model := range m {
 		if model.Order() == 1 {
 			return model
