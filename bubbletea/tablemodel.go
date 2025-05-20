@@ -96,8 +96,10 @@ func NewTableModel(p *TableModelParams) *TableModel {
 	columns := []table.Column{
 		{Title: "GitHub Stars", Width: 80},
 	}
+
+	// TODO(@chris-ramon): Wire external data.
 	rows := []table.Row{
-		{"9"},
+		{""},
 	}
 
 	t := table.New(
