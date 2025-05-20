@@ -23,10 +23,23 @@ type Model interface {
 
 	// WithBaseStyle updates the model to use the given base style.
 	WithBaseStyle(baseStyle lipgloss.Style)
+
+	// Order returns the order of the model.
+	Order() uint
 }
 
 // Models are the slice of Model interfaces.
 type Models []Model
+
+func (m Models) First() Model {
+	for _, model := range m {
+		if model.Order() == 1 {
+			return model
+		}
+	}
+
+	return nil
+}
 
 // BubbleTea represents the CLI component that wraps the `bubbletea` library.
 type BubbleTea struct {
@@ -35,6 +48,9 @@ type BubbleTea struct {
 
 	// currentModel is the current model of the BubbleTea component.
 	currentModel Model
+
+	// models are the models of the `BubbleTea` component.
+	models Models
 }
 
 // Init is the `BubbleTea` method required for implementing the `Model` interface.
@@ -91,7 +107,8 @@ func New(p *Params) *BubbleTea {
 	b := &BubbleTea{}
 
 	b.baseStyle = p.BaseStyle
-	b.currentModel = p.Model
+	b.models = p.Models
+	b.currentModel = p.Models.First()
 	b.currentModel.WithBaseStyle(p.BaseStyle)
 
 	return b
