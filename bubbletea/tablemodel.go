@@ -14,6 +14,9 @@ type TableModel struct {
 	// table is the `bubbletea` table model.
 	// TODO(@chris-ramon): Wire to the `TableModel` component.
 	table table.Model
+
+	// order is the order of the model
+	order uint
 }
 
 // `Init` is the `TableModel` method required for implementing the `Model` interface.
@@ -26,7 +29,7 @@ func (tm TableModel) Init() tea.Cmd {
 // Updates the `TableModel` component, handles the given message updating the internal state.
 // Returns the current `TableModel` and the resolved command.
 // TODO(@chris-ramon): Implement the `tea.Msg` handlers.
-func (tm TableModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:golint,ireturn
+func (tm *TableModel) Update(msg tea.Msg) (Model, tea.Cmd) { //nolint:golint,ireturn
 	keyMsg, ok := msg.(tea.KeyMsg)
 	if !ok {
 		return tm, nil
@@ -76,10 +79,17 @@ func (tm *TableModel) WithBaseStyle(baseStyle lipgloss.Style) {
 	tm.baseStyle = baseStyle
 }
 
+func (tm *TableModel) Order() uint {
+	return tm.order
+}
+
 // `TableModelParams` represents the parameters component for the `NewTableModel` function.
 type TableModelParams struct {
 	// BaseStyle is the base styling parameter.
 	BaseStyle lipgloss.Style
+
+	// Order is the order parameter.
+	Order uint
 }
 
 // `NewTableModel` returns a pointer to a `TableModel`.
@@ -97,5 +107,6 @@ func NewTableModel(p *TableModelParams) *TableModel {
 	return &TableModel{
 		baseStyle: p.BaseStyle,
 		table:     t,
+		order:     p.Order,
 	}
 }
