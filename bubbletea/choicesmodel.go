@@ -23,6 +23,9 @@ type ChoicesModel struct {
 
 	// baseStyle is the base styling of the BubbleTea component.
 	baseStyle lipgloss.Style
+
+	// order is the order of the model.
+	order uint
 }
 
 // ChoicesModelUI represents the UI struct for the `ChoicesModel` component.
@@ -118,6 +121,10 @@ func (b *ChoicesModel) WithBaseStyle(baseStyle lipgloss.Style) {
 	b.baseStyle = baseStyle
 }
 
+func (b *ChoicesModel) Order() uint {
+	return b.order
+}
+
 // ChoicesModelParams represents the parameters struct for the `NewChoicesModel` function.
 type ChoicesModelParams struct {
 	// Choice is the current CLI choice.
@@ -134,6 +141,9 @@ type ChoicesModelParams struct {
 
 	// BaseStyle is the base styling parameter of the BubbleTea component.
 	BaseStyle lipgloss.Style
+
+	// Order is the order parameter,
+	Order uint
 }
 
 // ChoicesModelUIParams represents the UI parameters for the `NewChoicesModel` function parameters.
@@ -152,5 +162,6 @@ func NewChoicesModel(p *ChoicesModelParams) *ChoicesModel {
 			header: p.UI.Header,
 		},
 		baseStyle: p.BaseStyle,
+		order:     p.Order,
 	}
 }
