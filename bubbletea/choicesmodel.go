@@ -92,7 +92,7 @@ func (b ChoicesModel) View() string {
 		s.WriteString("\n")
 	}
 
-	endingMessage := "\n(press q to quit)\n"
+	endingMessage := "\n(press enter to continue)\n"
 	s.WriteString(endingMessage)
 
 	choicesModelView := s.String()
