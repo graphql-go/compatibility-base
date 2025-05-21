@@ -93,20 +93,40 @@ type TableModelParams struct {
 
 // `NewTableModel` returns a pointer to a `TableModel`.
 func NewTableModel(p *TableModelParams) *TableModel {
+	widthColumn := 15
+
 	columns := []table.Column{
-		{Title: "GitHub Stars", Width: 80},
+		{Title: "Metric", Width: 43},
+		{Title: "Spec: https://github.com/graphql/graphql-js", Width: widthColumn},
+		{Title: "Impl: https://github.com/graphql-go/graphql", Width: widthColumn},
+		{Title: "Diff Ratio", Width: widthColumn},
+		{Title: "Max Diff", Width: widthColumn},
+		{Title: "Result", Width: widthColumn},
 	}
 
-	// TODO(@chris-ramon): Wire external data.
 	rows := []table.Row{
-		{""},
+		{"GitHub:", "", "", "", "", ""},
+		{"License", "MIT", "MIT", "0%", "0%", "✅"},
+		{"Number Of Stars", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+		{"Number Of Issues Open", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+		{"Number Of Issues Closed", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+		{"Number Of Pull Requests Open", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+		{"Number Of Pull Requests Closed", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+		{"Number Of Forks", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+		{"Last Commit Date", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+		{"Number Of Contributors", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+		{"GraphQL Compatibility Keywords:", "", "", "", "", ""},
+		{"Number Of Comments Open", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+		{"Number Of Comments Closed", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+		{"GraphQL:", "", "", "", "", ""},
+		{"Specification Version", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
 	}
 
 	t := table.New(
 		table.WithColumns(columns),
 		table.WithRows(rows),
 		table.WithFocused(false),
-		table.WithHeight(2),
+		table.WithHeight(17),
 	)
 
 	s := table.DefaultStyles()
