@@ -139,7 +139,7 @@ func NewBaseStyle() lipgloss.Style {
 		Bold(false).
 		PaddingTop(1).
 		PaddingLeft(1).
-		Width(135)
+		Width(124)
 }
 
 // New returns a new BubbleTea struct instance.
