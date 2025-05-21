@@ -91,20 +91,27 @@ type TableModelParams struct {
 	Order uint
 
 	// Headers are the slice of table headers.
-	Headers []string
+	Headers []TableHeader
 
 	// Rows are the slice of table rows.
 	Rows [][]string
 }
 
+// TableHeader represents the table header.
+type TableHeader struct {
+	// Title is the title of the table header.
+	Title string
+
+	// Width is the styling width of the table header.
+	Width uint
+}
+
 // `NewTableModel` returns a pointer to a `TableModel`.
 func NewTableModel(p *TableModelParams) *TableModel {
-	widthColumn := 15
-
 	columnsHeaders := []table.Column{}
 
 	for _, h := range p.Headers {
-		header := table.Column{Title: h, Width: widthColumn}
+		header := table.Column{Title: h.Title, Width: int(h.Width)}
 		columnsHeaders = append(columnsHeaders, header)
 	}
 
