@@ -89,42 +89,34 @@ type TableModelParams struct {
 
 	// Order is the order parameter.
 	Order uint
+
+	// Headers are the slice of table headers.
+	Headers []string
+
+	// Rows are the slice of table rows.
+	Rows [][]string
 }
 
 // `NewTableModel` returns a pointer to a `TableModel`.
 func NewTableModel(p *TableModelParams) *TableModel {
 	widthColumn := 15
 
-	columns := []table.Column{
-		{Title: "Metric", Width: 43},
-		{Title: "Spec: https://github.com/graphql/graphql-js", Width: widthColumn},
-		{Title: "Impl: https://github.com/graphql-go/graphql", Width: widthColumn},
-		{Title: "Diff Ratio", Width: widthColumn},
-		{Title: "Max Diff", Width: widthColumn},
-		{Title: "Result", Width: widthColumn},
+	columnsHeaders := []table.Column{}
+
+	for _, h := range p.Headers {
+		header := table.Column{Title: h, Width: widthColumn}
+		columnsHeaders = append(columnsHeaders, header)
 	}
 
-	rows := []table.Row{
-		{"GitHub:", "", "", "", "", ""},
-		{"License", "MIT", "MIT", "0%", "0%", "✅"},
-		{"Number Of Stars", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
-		{"Number Of Issues Open", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
-		{"Number Of Issues Closed", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
-		{"Number Of Pull Requests Open", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
-		{"Number Of Pull Requests Closed", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
-		{"Number Of Forks", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
-		{"Last Commit Date", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
-		{"Number Of Contributors", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
-		{"GraphQL Compatibility Keywords:", "", "", "", "", ""},
-		{"Number Of Comments Open", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
-		{"Number Of Comments Closed", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
-		{"GraphQL:", "", "", "", "", ""},
-		{"Specification Version", "Loading...", "Loading...", "Loading...", "Loading...", "Loading..."},
+	dataRows := []table.Row{}
+
+	for _, r := range p.Rows {
+		dataRows = append(dataRows, table.Row(r))
 	}
 
 	t := table.New(
-		table.WithColumns(columns),
-		table.WithRows(rows),
+		table.WithColumns(columnsHeaders),
+		table.WithRows(dataRows),
 		table.WithFocused(false),
 		table.WithHeight(17),
 	)
