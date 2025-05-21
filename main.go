@@ -16,6 +16,7 @@ func main() {
 
 	cfg := config.New()
 	header := cfg.GraphqlJSImplementation.Repo.String(implementation.RefImplementationPrefix)
+	headerWidth := uint(15)
 
 	params := cmd.NewParams{
 		Bubbletea: bubbletea.New(&bubbletea.Params{
@@ -29,13 +30,13 @@ func main() {
 				}),
 				bubbletea.NewTableModel(&bubbletea.TableModelParams{
 					Order: 2,
-					Headers: []string{
-						"Metric",
-						"Spec",
-						"Impl",
-						"Diff Ratio",
-						"Max Diff",
-						"Result",
+					Headers: []bubbletea.TableHeader{
+						{Title: "Metric", Width: 35},
+						{Title: "Spec: https://github.com/graphql/graphql-js", Width: headerWidth},
+						{Title: "Impl: https://github.com/graphql-go/graphql", Width: headerWidth},
+						{Title: "Diff Ratio", Width: headerWidth},
+						{Title: "Max Diff", Width: headerWidth},
+						{Title: "Result", Width: headerWidth},
 					},
 					Rows: [][]string{
 						[]string{"GitHub:", "", "", "", "", ""},
