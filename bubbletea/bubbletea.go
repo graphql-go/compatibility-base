@@ -31,6 +31,7 @@ type Model interface {
 // Models are the slice of Model interfaces.
 type Models []Model
 
+// `First` returns the first model of the `Models` slice.
 func (m Models) First() Model {
 	if len(m) == 1 {
 		return m[0]
@@ -63,13 +64,15 @@ func (b BubbleTea) Init() tea.Cmd {
 }
 
 // Update is the `BubbleTea` method required for implementing the `Model` interface.
+// Returns the `BubbleTea` struct and the next tea command(In case of `nil`, it indicates that the bubbletea program
+// continues to work).
 func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	model, cmd := b.currentModel.Update(msg)
-
 	keyMsg, ok := msg.(tea.KeyMsg)
 	if !ok {
 		return b, nil
 	}
+
+	model, cmd := b.currentModel.Update(msg)
 
 	switch keyMsg.String() {
 	case "enter":
@@ -136,7 +139,7 @@ func NewBaseStyle() lipgloss.Style {
 		Bold(false).
 		PaddingTop(1).
 		PaddingLeft(1).
-		Width(85)
+		Width(124)
 }
 
 // New returns a new BubbleTea struct instance.

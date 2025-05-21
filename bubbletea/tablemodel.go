@@ -89,24 +89,43 @@ type TableModelParams struct {
 
 	// Order is the order parameter.
 	Order uint
+
+	// Headers are the slice of table headers.
+	Headers []TableHeader
+
+	// Rows are the slice of table rows.
+	Rows [][]string
+}
+
+// TableHeader represents the table header.
+type TableHeader struct {
+	// Title is the title of the table header.
+	Title string
+
+	// Width is the styling width of the table header.
+	Width uint
 }
 
 // `NewTableModel` returns a pointer to a `TableModel`.
 func NewTableModel(p *TableModelParams) *TableModel {
-	columns := []table.Column{
-		{Title: "GitHub Stars", Width: 80},
+	columnsHeaders := []table.Column{}
+
+	for _, h := range p.Headers {
+		header := table.Column{Title: h.Title, Width: int(h.Width)}
+		columnsHeaders = append(columnsHeaders, header)
 	}
 
-	// TODO(@chris-ramon): Wire external data.
-	rows := []table.Row{
-		{""},
+	dataRows := []table.Row{}
+
+	for _, r := range p.Rows {
+		dataRows = append(dataRows, table.Row(r))
 	}
 
 	t := table.New(
-		table.WithColumns(columns),
-		table.WithRows(rows),
+		table.WithColumns(columnsHeaders),
+		table.WithRows(dataRows),
 		table.WithFocused(false),
-		table.WithHeight(2),
+		table.WithHeight(17),
 	)
 
 	s := table.DefaultStyles()
