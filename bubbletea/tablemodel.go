@@ -1,6 +1,8 @@
 package bubbletea
 
 import (
+	"fmt"
+
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -54,7 +56,9 @@ func (tm *TableModel) Update(msg tea.Msg) (Model, tea.Cmd) { //nolint:golint,ire
 // `View` is the `TableModel` method required for implementing the `Model` interface.
 // View renders the `TableModel` using the base style and returns the results.
 func (tm TableModel) View() string {
-	return tm.baseStyle.Render(tm.table.View()) + "\n"
+	endingMessage := "\n(press enter to continue)\n"
+	view := tm.baseStyle.Render(tm.table.View()) + "\n"
+	return fmt.Sprintf("%s%s", view, endingMessage)
 }
 
 // `TableModelResult` represents the `TableModel` run method result.
