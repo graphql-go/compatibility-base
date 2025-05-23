@@ -86,6 +86,13 @@ func (tm *TableModel) Order() uint {
 	return tm.order
 }
 
+// `Result` returns the `TableModel` component result.
+func (tm TableModel) Result() any {
+	result := &TableModelResult{}
+
+	return result
+}
+
 // `TableModelParams` represents the parameters component for the `NewTableModel` function.
 type TableModelParams struct {
 	// BaseStyle is the base styling parameter.
