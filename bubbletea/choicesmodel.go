@@ -55,7 +55,9 @@ func (b *ChoicesModel) Update(msg tea.Msg) (Model, tea.Cmd) { //nolint:golint,ir
 			b.choice = b.choices[b.cursor]
 		}
 
-		return b, tea.Quit
+		// TODO(@chris-ramon): Replace `nil` with `tea.ContinueMsg` when available.
+		// Related GitHub Issue: https://github.com/graphql-go/compatibility-base/issues/3#issuecomment-2894917209.
+		return b, nil
 
 	case "down", "j":
 		b.cursor++
@@ -106,15 +108,13 @@ type ChoicesModelResult struct {
 	Choice string
 }
 
-// Run runs the `ChoicesModel` component and returns its result.
-func (b ChoicesModel) Run(model any) (any, error) {
-	result := &ChoicesModelResult{}
-
-	if model, ok := model.(ChoicesModel); ok && model.choice != "" {
-		result.Choice = model.choice
+// `Result` returns the `ChoicesModel` component result.
+func (b ChoicesModel) Result() any {
+	result := &ChoicesModelResult{
+		Choice: b.choice,
 	}
 
-	return result, nil
+	return result
 }
 
 func (b *ChoicesModel) WithBaseStyle(baseStyle lipgloss.Style) {
