@@ -1,6 +1,7 @@
 package bubbletea
 
 import (
+	"errors"
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -18,8 +19,8 @@ type Model interface {
 	// View returns the model view representation.
 	View() string
 
-	// Run runs and returns its result.
-	Run(modelResult any) (any, error)
+	// Result returns the model result.
+	Result() any
 
 	// WithBaseStyle updates the model to use the given base style.
 	WithBaseStyle(baseStyle lipgloss.Style)
@@ -56,6 +57,15 @@ type BubbleTea struct {
 
 	// models are the models of the `BubbleTea` component.
 	models Models
+}
+
+// `BubbleTeaResult` represents the `BubbleTea` component run result.
+type BubbleTeaResult struct {
+	// `ChoicesModelResult` is the result of the `ChoicesModel` component.
+	ChoicesModelResult *ChoicesModelResult
+
+	// `TableModelResult` is the result of the `TableModel` component.
+	TableModelResult *TableModelResult
 }
 
 // Init is the `BubbleTea` method required for implementing the `Model` interface.
@@ -97,15 +107,42 @@ func (b BubbleTea) View() string {
 }
 
 // Run runs the `BubbleTea` component and returns its result.
-func (b BubbleTea) Run() (any, error) {
+func (b BubbleTea) Run() (*BubbleTeaResult, error) {
 	teaProgram := tea.NewProgram(b)
 
-	m, err := teaProgram.Run()
-	if err != nil {
+	if _, err := teaProgram.Run(); err != nil {
 		return nil, fmt.Errorf("failed to run: %w", err)
 	}
 
-	return b.currentModel.Run(m)
+	return b.Result()
+}
+
+// `Result` returns the `BubbleTea` component result.
+func (b BubbleTea) Result() (*BubbleTeaResult, error) {
+	r := &BubbleTeaResult{}
+
+	for _, m := range b.models {
+		switch m.(type) {
+		case *ChoicesModel:
+			result, ok := m.Result().(*ChoicesModelResult)
+			if !ok {
+				return nil, errors.New("unexpected type")
+			}
+
+			r.ChoicesModelResult = result
+		case *TableModel:
+			result, ok := m.Result().(*TableModelResult)
+			if !ok {
+				return nil, errors.New("unexpected type")
+			}
+
+			r.TableModelResult = result
+		default:
+			return nil, errors.New("unexpected type")
+		}
+	}
+
+	return r, nil
 }
 
 // NextModel returns the next model, ordered by the order field.

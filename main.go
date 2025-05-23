@@ -67,5 +67,6 @@ func main() {
 		handleErr(err)
 	}
 
-	log.Println(result)
+	log.Printf("ChoicesModelResult: %+v", result.ChoicesModelResult)
+	log.Printf("TableModelResult: %+v", result.TableModelResult)
 }
