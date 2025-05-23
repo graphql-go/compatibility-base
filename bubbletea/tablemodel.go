@@ -65,18 +65,6 @@ func (tm TableModel) View() string {
 type TableModelResult struct {
 }
 
-// `Run` is the `TableModel` method required for implementing the `Model` interface.
-// Runs the `TableModel` component and returns its result.
-func (tm TableModel) Run(model any) (any, error) {
-	result := &TableModelResult{}
-
-	if m, ok := model.(TableModel); ok {
-		return m, nil
-	}
-
-	return result, nil
-}
-
 // `WithBaseStyle` updates the `TableModel` component to use the given base style.
 func (tm *TableModel) WithBaseStyle(baseStyle lipgloss.Style) {
 	tm.baseStyle = baseStyle
