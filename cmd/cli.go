@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/graphql-go/compatibility-base/bubbletea"
@@ -28,8 +27,11 @@ func New(p *NewParams) *CLI {
 
 // RunResult is the result of executing the run method.
 type RunResult struct {
-	// Choice is the option chosen after running the CLI application.
-	Choice string
+	// `ChoicesModelResult` is the result of the `ChoicesModel`.
+	ChoicesModelResult *bubbletea.ChoicesModelResult
+
+	// `TableModelResult` is the result of the `TableModel`.
+	TableModelResult *bubbletea.TableModelResult
 }
 
 // RunParams are the parameters of the run method.
@@ -43,12 +45,10 @@ func (c *CLI) Run(p *RunParams) (*RunResult, error) {
 		return nil, fmt.Errorf("failed to run: %w", err)
 	}
 
-	r, ok := btRunResult.(*bubbletea.ChoicesModelResult)
-	if !ok {
-		return nil, errors.New("unexpected type")
+	r := &RunResult{
+		ChoicesModelResult: btRunResult.ChoicesModelResult,
+		TableModelResult:   btRunResult.TableModelResult,
 	}
 
-	return &RunResult{
-		Choice: r.Choice,
-	}, nil
+	return r, nil
 }
