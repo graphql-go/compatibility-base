@@ -190,7 +190,7 @@ func (b BubbleTea) NextModel() Model {
 }
 
 // UpdateModel updates `models` uses given model, the update is done by type.
-func (b BubbleTea) UpdateModel(model Model) error {
+func (b *BubbleTea) UpdateModel(model Model) error {
 	for idx, m := range b.models {
 		switch m.(type) {
 		case *ChoicesModel:
