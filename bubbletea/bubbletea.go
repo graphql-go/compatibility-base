@@ -120,8 +120,14 @@ func (b BubbleTea) View() string {
 }
 
 // `ResultCallback` sets the given function as a `BubbleTea` component resultCallback field.
-func (b *BubbleTea) ResultCallback(fn func(result *BubbleTeaResult) error) {
+func (b *BubbleTea) ResultCallback(fn func(result *BubbleTeaResult) error) error {
+	if fn == nil {
+		return errors.New("unexpected nil function")
+	}
+
 	b.resultCallback = fn
+
+	return nil
 }
 
 // RunParams represents the Run parameters.
@@ -132,7 +138,9 @@ type RunParams struct {
 
 // Run runs the `BubbleTea` component and returns its result.
 func (b BubbleTea) Run(p RunParams) (*BubbleTeaResult, error) {
-	b.ResultCallback(p.ResultCallback)
+	if err := b.ResultCallback(p.ResultCallback); err != nil {
+		return nil, err
+	}
 
 	teaProgram := tea.NewProgram(b)
 
