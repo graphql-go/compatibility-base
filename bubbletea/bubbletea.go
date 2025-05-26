@@ -56,7 +56,15 @@ type BubbleTea struct {
 	currentModel Model
 
 	// models are the models of the `BubbleTea` component.
+	// `BubbleTea` keeps track of unique model, tracked by type.
 	models Models
+
+	// `resultCallback` is the function callback that is called
+	// on `BubbleTea` result updates.
+	resultCallback func(result *BubbleTeaResult) error
+
+	// `errors` are the slice of `BubbleTea` component errors.
+	errors []error
 }
 
 // `BubbleTeaResult` represents the `BubbleTea` component run result.
@@ -91,6 +99,11 @@ func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return b, cmd
 		}
 
+		if err := b.BroadcastResult(); err != nil {
+			b.AppendError(err)
+			return b, cmd
+		}
+
 		b.currentModel = nextModel
 		b.currentModel.WithBaseStyle(b.baseStyle)
 		return b, nil
@@ -106,12 +119,29 @@ func (b BubbleTea) View() string {
 	return b.currentModel.View()
 }
 
+// `ResultCallback` sets the given function as a `BubbleTea` component resultCallback field.
+func (b *BubbleTea) ResultCallback(fn func(result *BubbleTeaResult) error) {
+	b.resultCallback = fn
+}
+
+// RunParams represents the Run parameters.
+type RunParams struct {
+	// ResultCallback is the result callback Run parameter.
+	ResultCallback func(result *BubbleTeaResult) error
+}
+
 // Run runs the `BubbleTea` component and returns its result.
-func (b BubbleTea) Run() (*BubbleTeaResult, error) {
+func (b BubbleTea) Run(p RunParams) (*BubbleTeaResult, error) {
+	b.ResultCallback(p.ResultCallback)
+
 	teaProgram := tea.NewProgram(b)
 
 	if _, err := teaProgram.Run(); err != nil {
 		return nil, fmt.Errorf("failed to run: %w", err)
+	}
+
+	if err := b.Error(); err != nil {
+		return nil, err
 	}
 
 	return b.Result()
@@ -157,6 +187,53 @@ func (b BubbleTea) NextModel() Model {
 	}
 
 	return nil
+}
+
+// UpdateModel updates `models` uses given model, the update is done by type.
+func (b BubbleTea) UpdateModel(model Model) error {
+	for idx, m := range b.models {
+		switch m.(type) {
+		case *ChoicesModel:
+			b.models[idx] = model
+		case *TableModel:
+			b.models[idx] = model
+		default:
+			return errors.New("unexpected type")
+		}
+	}
+
+	return nil
+}
+
+// `BroadcastResult` broadcasts the results to the results callback.
+func (b BubbleTea) BroadcastResult() error {
+	r, err := b.Result()
+	if err != nil {
+		return err
+	}
+
+	return b.resultCallback(r)
+}
+
+// `Error` returns the current `BubbleTea` error.
+func (b BubbleTea) Error() error {
+	var err error
+
+	for _, e := range b.errors {
+		if err == nil {
+			err = e
+			continue
+		}
+
+		err = fmt.Errorf("%w: %w", err, e)
+	}
+
+	return err
+}
+
+// `AppendError` appends the given error to the `BubbleTea` component slice of errors.
+func (b *BubbleTea) AppendError(err error) {
+	b.errors = append(b.errors, err)
 }
 
 // Params represents the parameters for the `NewBubbleTea` function.
