@@ -36,11 +36,17 @@ type RunResult struct {
 
 // RunParams are the parameters of the run method.
 type RunParams struct {
+	// `ResultCallback` is the results callback Run parameter.
+	ResultCallback func(result *bubbletea.BubbleTeaResult) error
 }
 
 // Run runs the CLI application and returns the result.
 func (c *CLI) Run(p *RunParams) (*RunResult, error) {
-	btRunResult, err := c.bubbletea.Run()
+	runParams := bubbletea.RunParams{
+		ResultCallback: p.ResultCallback,
+	}
+
+	btRunResult, err := c.bubbletea.Run(runParams)
 	if err != nil {
 		return nil, fmt.Errorf("failed to run: %w", err)
 	}
@@ -51,4 +57,9 @@ func (c *CLI) Run(p *RunParams) (*RunResult, error) {
 	}
 
 	return r, nil
+}
+
+// `UpdateModel` calls the `BubbleTea` component `UpdateModel` method.
+func (c *CLI) UpdateModel(model bubbletea.Model) error {
+	return c.bubbletea.UpdateModel(model)
 }
