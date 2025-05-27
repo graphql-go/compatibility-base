@@ -202,9 +202,13 @@ func (b *BubbleTea) UpdateModel(model Model) error {
 	for idx, m := range b.models {
 		switch m.(type) {
 		case *ChoicesModel:
-			b.models[idx] = model
+			if _, ok := model.(*ChoicesModel); ok {
+				b.models[idx] = model
+			}
 		case *TableModel:
-			b.models[idx] = model
+			if _, ok := model.(*TableModel); ok {
+				b.models[idx] = model
+			}
 		default:
 			return errors.New("unexpected type")
 		}
