@@ -56,7 +56,6 @@ type BubbleTea struct {
 	currentModel Model
 
 	// models are the models of the `BubbleTea` component.
-	// `BubbleTea` keeps track of unique model, tracked by type.
 	models Models
 
 	// `resultCallback` is the function callback that is called
