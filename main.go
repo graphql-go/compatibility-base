@@ -16,7 +16,7 @@ func main() {
 	}
 
 	cfg := config.New()
-	defaultSpecTableHeader := fmt.Sprintf("Spec: %s", cfg.GraphqlJSImplementation.Repo.URL)
+	defaultSpecTableHeader := fmt.Sprintf("Ref: %s", cfg.GraphqlJSImplementation.Repo.URL)
 	defaultImplTableHeader := "Impl: https://github.com/graphql-go/graphql"
 	choicesModelUIHeader := cfg.GraphqlJSImplementation.Repo.String(implementation.RefImplementationPrefix)
 
