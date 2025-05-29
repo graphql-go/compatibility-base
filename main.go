@@ -60,7 +60,7 @@ func main() {
 
 // `newTableModel` creates and returns a pointer to `bubbletea.TableModel`.
 func newTableModel(specificationHeader string, implementationHeader string) *bubbletea.TableModel {
-	headerWidth := uint(15)
+	headerWidth := uint(16)
 
 	return bubbletea.NewTableModel(&bubbletea.TableModelParams{
 		Order: 2,
