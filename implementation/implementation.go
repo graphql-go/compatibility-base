@@ -1,7 +1,7 @@
 package implementation
 
 // ImplementationPrefix is the default implementation prefix.
-const ImplementationPrefix = "Implementation"
+const ImplementationPrefix = "Impl"
 
 // RefImplementationPrefix is the reference implementation prefix.
 const RefImplementationPrefix = "Reference Implementation"

@@ -16,7 +16,7 @@ func main() {
 	}
 
 	cfg := config.New()
-	defaultSpecTableHeader := fmt.Sprintf("Spec: %s", cfg.GraphqlJSImplementation.Repo.URL)
+	defaultSpecTableHeader := fmt.Sprintf("Ref: %s", cfg.GraphqlJSImplementation.Repo.URL)
 	defaultImplTableHeader := "Impl: https://github.com/graphql-go/graphql"
 	choicesModelUIHeader := cfg.GraphqlJSImplementation.Repo.String(implementation.RefImplementationPrefix)
 
@@ -39,7 +39,7 @@ func main() {
 
 	resultCallback := func(result *bubbletea.BubbleTeaResult) error {
 		choicesModelUIHeader := result.ChoicesModelResult.Choice
-		tableModel := newTableModel(choicesModelUIHeader, defaultImplTableHeader)
+		tableModel := newTableModel(defaultSpecTableHeader, choicesModelUIHeader)
 
 		if err := cli.UpdateModel(tableModel); err != nil {
 			log.Printf("failed to update table model: %v", err)
@@ -60,7 +60,7 @@ func main() {
 
 // `newTableModel` creates and returns a pointer to `bubbletea.TableModel`.
 func newTableModel(specificationHeader string, implementationHeader string) *bubbletea.TableModel {
-	headerWidth := uint(15)
+	headerWidth := uint(16)
 
 	return bubbletea.NewTableModel(&bubbletea.TableModelParams{
 		Order: 2,

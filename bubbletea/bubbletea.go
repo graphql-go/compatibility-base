@@ -93,13 +93,13 @@ func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch keyMsg.String() {
 	case "enter":
-		nextModel := b.NextModel()
-		if nextModel == nil {
+		if err := b.BroadcastResult(); err != nil {
+			b.AppendError(err)
 			return b, cmd
 		}
 
-		if err := b.BroadcastResult(); err != nil {
-			b.AppendError(err)
+		nextModel := b.NextModel()
+		if nextModel == nil {
 			return b, cmd
 		}
 
@@ -218,6 +218,10 @@ func (b *BubbleTea) UpdateModel(model Model) error {
 
 // `BroadcastResult` broadcasts the results to the results callback.
 func (b BubbleTea) BroadcastResult() error {
+	if b.resultCallback == nil {
+		return nil
+	}
+
 	r, err := b.Result()
 	if err != nil {
 		return err
@@ -264,7 +268,7 @@ func NewBaseStyle() lipgloss.Style {
 		Bold(false).
 		PaddingTop(1).
 		PaddingLeft(1).
-		Width(124)
+		Width(130)
 }
 
 // New returns a new BubbleTea struct instance.
