@@ -93,13 +93,13 @@ func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch keyMsg.String() {
 	case "enter":
-		nextModel := b.NextModel()
-		if nextModel == nil {
+		if err := b.BroadcastResult(); err != nil {
+			b.AppendError(err)
 			return b, cmd
 		}
 
-		if err := b.BroadcastResult(); err != nil {
-			b.AppendError(err)
+		nextModel := b.NextModel()
+		if nextModel == nil {
 			return b, cmd
 		}
 
