@@ -39,7 +39,7 @@ func main() {
 
 	resultCallback := func(result *bubbletea.BubbleTeaResult) error {
 		choicesModelUIHeader := result.ChoicesModelResult.Choice
-		tableModel := newTableModel(choicesModelUIHeader, defaultImplTableHeader)
+		tableModel := newTableModel(defaultSpecTableHeader, choicesModelUIHeader)
 
 		if err := cli.UpdateModel(tableModel); err != nil {
 			log.Printf("failed to update table model: %v", err)
