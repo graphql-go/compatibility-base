@@ -218,6 +218,10 @@ func (b *BubbleTea) UpdateModel(model Model) error {
 
 // `BroadcastResult` broadcasts the results to the results callback.
 func (b BubbleTea) BroadcastResult() error {
+	if b.resultCallback == nil {
+		return nil
+	}
+
 	r, err := b.Result()
 	if err != nil {
 		return err
