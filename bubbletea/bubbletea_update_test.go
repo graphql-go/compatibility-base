@@ -65,7 +65,7 @@ func TestBubbleTeaUpdate(t *testing.T) {
 				})},
 				BaseStyle: NewBaseStyle(),
 			}),
-			expectedCmd: (tea.Cmd)(nil),
+			expectedCmd: tea.Quit,
 		},
 		{
 			subTestName: "Handles down tea key message",
