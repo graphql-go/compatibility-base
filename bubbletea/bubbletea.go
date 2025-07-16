@@ -100,7 +100,7 @@ func (b BubbleTea) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		nextModel := b.NextModel()
 		if nextModel == nil {
-			return b, cmd
+			return b, tea.Quit
 		}
 
 		b.currentModel = nextModel
@@ -120,10 +120,6 @@ func (b BubbleTea) View() string {
 
 // `ResultCallback` sets the given function as a `BubbleTea` component resultCallback field.
 func (b *BubbleTea) ResultCallback(fn func(result *BubbleTeaResult) error) error {
-	if fn == nil {
-		return errors.New("unexpected nil function")
-	}
-
 	b.resultCallback = fn
 
 	return nil
