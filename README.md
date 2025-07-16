@@ -17,7 +17,7 @@ Running single model example:
 ./bin/dev.sh single
 ```
 
-Running single model example:
+Running multiple model example:
 ```
 ./bin/dev.sh multiple
 ```
