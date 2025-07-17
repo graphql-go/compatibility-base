@@ -38,8 +38,8 @@ func main() {
 	cli := cmd.New(&cmdParams)
 
 	resultCallback := func(result *bubbletea.BubbleTeaResult) error {
-		choicesModelUIHeader := result.ChoicesModelResult.Choice
-		tableModel := newTableModel(defaultSpecTableHeader, choicesModelUIHeader)
+		implementationHeader := result.ChoicesModelResult.Choice
+		tableModel := newTableModel(defaultSpecTableHeader, implementationHeader)
 
 		if err := cli.UpdateModel(tableModel); err != nil {
 			log.Printf("failed to update table model: %v", err)
